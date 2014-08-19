@@ -1,6 +1,7 @@
 //
-//  AF+ImageVIew+Exnension.swift
-//  Demo AF+Image+Helper
+//  AF+ImageView+Extension.swift
+//
+//  Version 1.01
 //
 //  Created by Melvin Rivera on 7/23/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.

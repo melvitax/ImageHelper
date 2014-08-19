@@ -3,7 +3,8 @@ AF+Image+Helper
 
 Convenience extension for UIImage and UIImageView in Swift
 A collection of extensions for handling image creation from colors and gradients, cropping, scaling and fetching from the web with support for caching.
-Tested with IOS 8 Beta 5
+
+Tested with Xcode 6 Beta 6
 
 ![Sample Project Screenshot](Screenshot.png?raw=true "Sample Project Screenshot")
 

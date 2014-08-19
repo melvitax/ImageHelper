@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6572931619805EF800F92FC0 /* AF+ImageVIew+Exnension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572931519805EF800F92FC0 /* AF+ImageVIew+Exnension.swift */; };
+		6572931619805EF800F92FC0 /* AF+ImageVIew+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572931519805EF800F92FC0 /* AF+ImageVIew+Extension.swift */; };
 		6581F3DB1968328100C5CA28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581F3DA1968328100C5CA28 /* AppDelegate.swift */; };
 		6581F3DD1968328100C5CA28 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6581F3DC1968328100C5CA28 /* ViewController.swift */; };
 		6581F3E01968328100C5CA28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6581F3DE1968328100C5CA28 /* Main.storyboard */; };
@@ -23,7 +23,7 @@
 		65613686192E526900E30E76 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		656136A4192E526900E30E76 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		656136C5192E6FDD00E30E76 /* beach.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = beach.png; path = "Demo AF+Image+Helper/beach.png"; sourceTree = "<group>"; };
-		6572931519805EF800F92FC0 /* AF+ImageVIew+Exnension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageVIew+Exnension.swift"; sourceTree = "<group>"; };
+		6572931519805EF800F92FC0 /* AF+ImageVIew+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageVIew+Extension.swift"; sourceTree = "<group>"; };
 		6581F3D61968328100C5CA28 /* Demo AF+Image+Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo AF+Image+Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6581F3D91968328100C5CA28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Demo AF+Image+Helper/Info.plist"; sourceTree = "<group>"; };
 		6581F3DA1968328100C5CA28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "Demo AF+Image+Helper/AppDelegate.swift"; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				65D016A5197720FA005220FB /* AF+Image+Extension.swift */,
-				6572931519805EF800F92FC0 /* AF+ImageVIew+Exnension.swift */,
+				6572931519805EF800F92FC0 /* AF+ImageVIew+Extension.swift */,
 			);
 			name = "AF+Image+Helper";
 			path = "../AF+Image+Helper";
@@ -164,7 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				65D016A6197720FA005220FB /* AF+Image+Extension.swift in Sources */,
-				6572931619805EF800F92FC0 /* AF+ImageVIew+Exnension.swift in Sources */,
+				6572931619805EF800F92FC0 /* AF+ImageVIew+Extension.swift in Sources */,
 				6581F3DD1968328100C5CA28 /* ViewController.swift in Sources */,
 				6581F3DB1968328100C5CA28 /* AppDelegate.swift in Sources */,
 			);

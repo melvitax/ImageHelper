@@ -1,6 +1,7 @@
 //
-//  UIImage+AF+Additions.swift
-//  Demo UIImage+AF+Additions
+//  AF+Image+Extension.swift
+//
+//  Version 1.01
 //
 //  Created by Melvin Rivera on 7/5/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
