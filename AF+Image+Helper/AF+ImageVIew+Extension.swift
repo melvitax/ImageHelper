@@ -23,7 +23,7 @@ extension UIImageView {
             if fadeIn {
                 let crossFade = CABasicAnimation(keyPath: "contents")
                 crossFade.duration = 0.5
-                crossFade.fromValue = self.image.CGImage!
+                crossFade.fromValue = self.image?.CIImage
                 crossFade.toValue = image!.CGImage
                 self.layer.addAnimation(crossFade, forKey: "")
             }

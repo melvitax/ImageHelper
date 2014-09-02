@@ -1,7 +1,7 @@
 //
 //  AF+Image+Extension.swift
 //
-//  Version 1.01
+//  Version 1.02
 //
 //  Created by Melvin Rivera on 7/5/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
@@ -32,7 +32,7 @@ extension UIImage {
         return StaticSharedCache.sharedCache!
     }
     
-    //#pragma mark - Image from solid color
+    // MARK: Image from solid color
     convenience init(color:UIColor, size:CGSize = CGSizeMake(10, 10) )
     {
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
@@ -44,7 +44,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
     }
     
-    //#pragma mark - Image from gradient colors
+    // MARK:  Image from gradient colors
     convenience init(gradientColors:[UIColor], size:CGSize = CGSizeMake(10, 10) )
     {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -79,7 +79,7 @@ extension UIImage {
         return image;
     }
     
-    //#pragma mark - Image with Text
+    // MARK: Image with Text
     convenience init(text: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
     {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -95,7 +95,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
     }
     
-    //# pragma mark - Image from uiview
+    // MARK: Image from uiview
     convenience init(fromView view: UIView) {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
         //view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
@@ -104,7 +104,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
     }
     
-    //#pragma mark - Image with Radial Gradient
+    // MARK: Image with Radial Gradient
     // Render a radial background
     // Originally from: http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
     convenience init(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint = CGPoint(x: 0.5, y: 0.5), radius:Float = 0.5, size:CGSize = CGSizeMake(100, 100))
@@ -135,7 +135,7 @@ extension UIImage {
         UIGraphicsEndImageContext()
     }
     
-    //#pragma mark - Alpha
+    // MARK: Alpha
     
     // Returns true if the image has an alpha layer
     func hasAlpha() -> Bool
@@ -196,14 +196,11 @@ extension UIImage {
         var transparentImage = UIImage(CGImage: CGImageCreateWithMask(CGBitmapContextCreateImage(context), imageRefWithPadding(padding, size: rect.size)))
         return transparentImage
     }
-    
-    //#pragma mark - Private helper methods
-    
-    
+
     // Creates a mask that makes the outer edges transparent and everything else opaque
     // The size must include the entire mask (opaque part + transparent border)
     // The caller is responsible for releasing the returned reference by calling CGImageRelease
-    func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef
+    private func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef
     {
         // Build a context that's the same dimensions as the new size
         let colorSpace = CGColorSpaceCreateDeviceGray()
@@ -220,8 +217,8 @@ extension UIImage {
         return maskImageRef
     }
     
-    //#pragma mark - Crop
-    
+
+    // MARK: Crop
     
     func crop(bounds: CGRect) -> UIImage
     {
@@ -237,7 +234,7 @@ extension UIImage {
         return crop(insetRect)
     }
     
-    //#pragma mark - Resize
+    // MARK: Resize
     
     func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage
     {
@@ -283,7 +280,7 @@ extension UIImage {
     }
 
     
-    // #pragma mark - Corner Radius
+    // MARK: Corner Radius
     
     func roundCorners(cornerRadius:CGFloat) -> UIImage
     {
@@ -341,7 +338,7 @@ extension UIImage {
         return cropToSquare().roundCorners(shortest/2, border: border, color: color)
     }
     
-    // #pragma mark - Border
+    // MARK: Border
     
     func applyBorder(border:CGFloat, color:UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -364,7 +361,7 @@ extension UIImage {
         return image
     }
     
-    //#pragma mark - Image From URL
+    // MARK: Image From URL
     
     class func imageFromURL(url: String, placeholder: UIImage, shouldCacheImage: Bool = true, closure: (image: UIImage?) -> ()) -> UIImage?
     {
