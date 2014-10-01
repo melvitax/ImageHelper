@@ -21,8 +21,8 @@ class Cell: UICollectionViewCell {
 
 class ViewController: UICollectionViewController {
     
-    let imageWidth = 140
-    let imageHeight = 140
+    let imageWidth = 140.0
+    let imageHeight = 140.0
     
     var sections = [String]()
     var items = [[CellItem]]()
@@ -31,47 +31,75 @@ class ViewController: UICollectionViewController {
         
         super.viewDidLoad()
         
+        
         // Colors & Gradients
         sections.append("Colors & Gradients")
-        items.append([
-            CellItem(text: "Solid Color", image: UIImage(color: UIColor(red: 0, green: 0.502, blue: 1, alpha: 1), size: CGSize(width: imageWidth, height: imageHeight))),
-            CellItem(text: "Gradient Color", image: UIImage(gradientColors: [UIColor(red: 0.808, green: 0.863, blue: 0.902, alpha: 1), UIColor(red: 0.349, green: 0.412, blue: 0.443, alpha: 1)], size: CGSize(width: imageWidth, height: imageHeight))),
-            CellItem(text: "Gradient Overlay", image: UIImage(named: "beach").applyGradientColors([UIColor(red: 0.996, green: 0.769, blue: 0.494, alpha: 1), UIColor(red: 0.969, green: 0.608, blue: 0.212, alpha: 0.2)])),
-            CellItem(text: "Radial Gradient", image: UIImage(startColor: UIColor(red: 0.996, green: 1, blue: 1, alpha: 1), endColor: UIColor(red: 0.627, green: 0.835, blue: 0.922, alpha: 1), radialGradientCenter: CGPoint(x: 0.5, y: 0.5), radius: 0.5, size: CGSize(width: imageWidth, height: imageHeight)))
-            ])
+        var colors = [CellItem]()
+        if let image = UIImage(color: UIColor(red: 0.0, green: 0.502, blue: 1.0, alpha: 1.0), size: CGSize(width: imageWidth, height: imageHeight)) {
+            colors.append(CellItem(text: "Solid Color", image: image))
+        }
+        if let image = UIImage(gradientColors: [UIColor(red: 0.808, green: 0.863, blue: 0.902, alpha: 1.0), UIColor(red: 0.349, green: 0.412, blue: 0.443, alpha: 1.0)], size: CGSize(width: imageWidth, height: imageHeight)) {
+            colors.append(CellItem(text: "Gradient Color", image: image))
+        }
+        if let image = UIImage(named: "beach")?.applyGradientColors([UIColor(red: 0.996, green: 0.769, blue: 0.494, alpha: 1.0), UIColor(red: 0.969, green: 0.608, blue: 0.212, alpha: 0.2)]) {
+            colors.append(CellItem(text: "Gradient Overlay", image: image))
+        }
+        if let image = UIImage(startColor: UIColor(red: 0.996, green: 1.0, blue: 1.0, alpha: 1.0), endColor: UIColor(red: 0.627, green: 0.835, blue: 0.922, alpha: 1.0), radialGradientCenter: CGPoint(x: 0.5, y: 0.5), radius: 0.5, size: CGSize(width: imageWidth, height: imageHeight)) {
+            colors.append(CellItem(text: "Radial Gradient", image: image))
+        }
+        items.append(colors)
+       
         
         // Text
         sections.append("Text")
-        items.append([
-            CellItem(text: "Text Image", image: UIImage(text: "M", font: UIFont.systemFontOfSize(64), color: UIColor.whiteColor(), backgroundColor: UIColor.redColor(), size: CGSize(width: imageWidth, height: imageHeight), offset: CGPoint(x: 0, y: 30)))
-            ])
-        
+        var text = [CellItem]()
+        if let image = UIImage(text: "M", font: UIFont.systemFontOfSize(64), color: UIColor.whiteColor(), backgroundColor: UIColor.redColor(), size: CGSize(width: imageWidth, height: imageHeight), offset: CGPoint(x: 0.0, y: 30.0)) {
+            text.append(CellItem(text: "Text Image", image: image))
+        }
+        items.append(text)
+    
         // Rounded Edges & Borders
         sections.append("Rounded Edges & Borders")
-        items.append([
-            CellItem(text: "Circle", image: UIImage(named: "beach").roundCornersToCircle()),
-            CellItem(text: "Circle + Border", image: UIImage(named: "beach").roundCornersToCircle(border: 60, color: UIColor.grayColor())),
-            CellItem(text: "Round Corners", image: UIImage(named: "beach").roundCorners(12))
-            ])
+        var corners = [CellItem]()
+        if let image = UIImage(named: "beach")?.roundCornersToCircle() {
+            corners.append(CellItem(text: "Circle", image: image))
+        }
+        if let image = UIImage(named: "beach")?.roundCornersToCircle(border: 60.0, color: UIColor.grayColor()) {
+            corners.append(CellItem(text: "Circle + Border", image: image))
+        }
+        if let image = UIImage(named: "beach")?.roundCorners(12.0) {
+            corners.append(CellItem(text: "Round Corners", image: image))
+        }
+        items.append(corners)
+    
         
         // Cropping
         sections.append("Cropping")
-        items.append([
-            CellItem(text: "Crop + Resize", image: UIImage(named: "beach").crop(CGRect(x: 40, y: 40, width: 320, height: 100)).applyPadding(6))
-            ])
+        var cropping = [CellItem]()
+        if let image = UIImage(named: "beach")?.crop(CGRect(x: 40.0, y: 40.0, width: 320.0, height: 100.0))?.applyPadding(6.0) {
+            cropping.append(CellItem(text: "Crop + Resize", image: image))
+        }
+        items.append(cropping)
+        
         
         // Screenshot
         sections.append("Screenshot")
-        items.append([
-            CellItem(text: "From View", image: UIImage(fromView: self.view).resize(CGSize(width: imageWidth, height: imageHeight), contentMode: .ScaleAspectFill))
-            ])
-        
+        var screenshot = [CellItem]()
+        if let image = UIImage(fromView: self.view)?.resize(CGSize(width: imageWidth, height: imageHeight), contentMode: .ScaleAspectFill) {
+            screenshot.append(CellItem(text: "From View", image: image))
+        }
+        items.append(screenshot)
+       
+    
         // Web Image
         sections.append("Web Image")
-        items.append([
-            CellItem(text: "From URL", image: UIImage(color: UIColor.redColor()))
-            ])
+        var web = [CellItem]()
+        if let image = UIImage(color: UIColor.redColor()) {
+            web.append(CellItem(text: "From URL", image: image))
+        }
+        items.append(web)
         
+       
     }
     
     override func viewWillAppear(animated: Bool) {
