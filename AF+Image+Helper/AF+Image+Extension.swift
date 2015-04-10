@@ -1,7 +1,7 @@
 //
 //  AF+Image+Extension.swift
 //
-//  Version 1.03
+//  Version 1.04
 //
 //  Created by Melvin Rivera on 7/5/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
@@ -113,13 +113,13 @@ extension UIImage {
         // Init
         UIGraphicsBeginImageContextWithOptions(size, true, 0)
         
-        let num_locations: UInt = 2
-        let locations: [CGFloat] = [0.0, 1.0]
+        let num_locations: Int = 2
+        let locations: [CGFloat] = [0.0, 1.0] as [CGFloat]
         
         let startComponents = CGColorGetComponents(startColor.CGColor)
         let endComponents = CGColorGetComponents(endColor.CGColor)
         
-        let components: [CGFloat] = [startComponents[0], startComponents[1], startComponents[2], startComponents[3], endComponents[0], endComponents[1], endComponents[2], endComponents[3]]
+        let components: [CGFloat] = [startComponents[0], startComponents[1], startComponents[2], startComponents[3], endComponents[0], endComponents[1], endComponents[2], endComponents[3]] as [CGFloat]
         
         var colorSpace = CGColorSpaceCreateDeviceRGB()
         var gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, num_locations)
@@ -187,7 +187,7 @@ extension UIImage {
         let colorSpace = CGImageGetColorSpace(self.CGImage)
         let bitmapInfo = CGImageGetBitmapInfo(self.CGImage)
         let bitsPerComponent = CGImageGetBitsPerComponent(self.CGImage)
-        let context = CGBitmapContextCreate(nil, UInt(rect.size.width), UInt(rect.size.height), bitsPerComponent, 0, colorSpace, bitmapInfo)
+        let context = CGBitmapContextCreate(nil, Int(rect.size.width), Int(rect.size.height), bitsPerComponent, 0, colorSpace, bitmapInfo)
         
         // Draw the image in the center of the context, leaving a gap around the edges
         let imageLocation = CGRect(x: padding, y: padding, width: image!.size.width, height: image!.size.height)
@@ -206,7 +206,7 @@ extension UIImage {
         // Build a context that's the same dimensions as the new size
         let colorSpace = CGColorSpaceCreateDeviceGray()
         let bitmapInfo = CGBitmapInfo(CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.None.rawValue)
-        let context = CGBitmapContextCreate(nil, UInt(size.width), UInt(size.height), 8, 0, colorSpace, bitmapInfo)
+        let context = CGBitmapContextCreate(nil, Int(size.width), Int(size.height), 8, 0, colorSpace, bitmapInfo)
         // Start with a mask that's entirely transparent
         CGContextSetFillColorWithColor(context, UIColor.blackColor().CGColor)
         CGContextFillRect(context, CGRect(x: 0, y: 0, width: size.width, height: size.height))
@@ -259,7 +259,7 @@ extension UIImage {
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let context = CGBitmapContextCreate(nil, UInt(rect.size.width), UInt(rect.size.height), 8, 0, colorSpace, bitmapInfo)
+        let context = CGBitmapContextCreate(nil, Int(rect.size.width), Int(rect.size.height), 8, 0, colorSpace, bitmapInfo)
         
         let transform = CGAffineTransformIdentity
         
@@ -270,7 +270,7 @@ extension UIImage {
         CGContextSetInterpolationQuality(context, CGInterpolationQuality(3))
         
         
- //       CGContextSetInterpolationQuality(context, CGInterpolationQuality(kCGInterpolationHigh.value))
+        //CGContextSetInterpolationQuality(context, CGInterpolationQuality(kCGInterpolationHigh.value))
                 
         // Draw into the context; this scales the image
         CGContextDrawImage(context, rect, self.CGImage)
@@ -373,7 +373,7 @@ extension UIImage {
         if shouldCacheImage {
             if UIImage.sharedCache().objectForKey(url) != nil {
                 closure(image: nil)
-                return UIImage.sharedCache().objectForKey(url) as UIImage!
+                return UIImage.sharedCache().objectForKey(url) as! UIImage!
             }
         }
         // Fetch Image

@@ -1,7 +1,7 @@
 //
 //  AF+ImageView+Extension.swift
 //
-//  Version 1.03
+//  Version 1.04
 //
 //  Created by Melvin Rivera on 7/23/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.

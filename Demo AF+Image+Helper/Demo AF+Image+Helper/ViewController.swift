@@ -112,8 +112,8 @@ class ViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        let headerView:UICollectionReusableView! = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Header", forIndexPath: indexPath) as UICollectionReusableView
-        let textLabel = headerView.viewWithTag(1) as UILabel
+        let headerView:UICollectionReusableView! = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Header", forIndexPath: indexPath) as! UICollectionReusableView
+        let textLabel = headerView.viewWithTag(1) as! UILabel
         textLabel.text = sections[indexPath.section]
         return headerView
     }
@@ -127,7 +127,7 @@ class ViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
     {
         let cellID = "Cell"
-        let cell:Cell! = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath) as Cell
+        let cell:Cell! = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath) as! Cell
         
         let item: CellItem = items[indexPath.section][indexPath.item]
         cell.textLabel.text = item.text
