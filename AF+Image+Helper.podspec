@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author   = { 'Melvin Rivera' => 'melvin@allforces.com' }
   s.source   = { :git => 'https://github.com/melvitax/AFImageHelper.git', :tag => s.version.to_s }
   s.description = 'A collection of extensions for handling image creation from colors and gradients, cropping, scaling and fetching from the web with support for caching.'
-  s.source_files = 'UIImage+AF+Additions/*'
+  s.source_files = 'AF+Image+Helper/*'
   s.framework    = 'QuartzCore'
   s.requires_arc = true
 end
