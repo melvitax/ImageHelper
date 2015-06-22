@@ -394,7 +394,7 @@ extension UIImage {
                         closure(image: image)
                     }
                 }
-                
+                session.finishTasksAndInvalidate()
             }).resume()
         }
         return placeholder
