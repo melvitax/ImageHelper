@@ -13,12 +13,12 @@ import QuartzCore
 import CoreGraphics
 
 
-enum UIImageContentMode {
+public enum UIImageContentMode {
     case ScaleToFill, ScaleAspectFit, ScaleAspectFill
 }
 
 
-extension UIImage {
+public extension UIImage {
     
     private class func sharedCache() -> NSCache!
     {

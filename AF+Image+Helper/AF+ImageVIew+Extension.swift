@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import QuartzCore
 
-extension UIImageView {
+public extension UIImageView {
         
     func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
     {
