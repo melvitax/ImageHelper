@@ -64,7 +64,7 @@ class ViewController: UICollectionViewController {
         if let image = UIImage(named: "beach")?.roundCornersToCircle() {
             corners.append(CellItem(text: "Circle", image: image))
         }
-        if let image = UIImage(named: "beach")?.roundCornersToCircle(border: 60.0, color: UIColor.grayColor()) {
+        if let image = UIImage(named: "beach")?.roundCornersToCircle(60.0, color: UIColor.grayColor()) {
             corners.append(CellItem(text: "Circle + Border", image: image))
         }
         if let image = UIImage(named: "beach")?.roundCorners(12.0) {
@@ -112,7 +112,7 @@ class ViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        let headerView:UICollectionReusableView! = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Header", forIndexPath: indexPath) as! UICollectionReusableView
+        let headerView:UICollectionReusableView! = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Header", forIndexPath: indexPath) 
         let textLabel = headerView.viewWithTag(1) as! UILabel
         textLabel.text = sections[indexPath.section]
         return headerView
