@@ -1,91 +1,115 @@
-AF+Image+Helper 1.04
-=============================
+# AFImageHelper
 
-Convenience extension for UIImage and UIImageView in Swift
-A collection of extensions for handling image creation from colors and gradients, cropping, scaling and fetching from the web with support for caching.
+[![Version](https://img.shields.io/cocoapods/v/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
+[![License](https://img.shields.io/cocoapods/l/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
+[![Platform](https://img.shields.io/cocoapods/p/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 
-Works with Swift 1.2
-
-![Sample Project Screenshot](Screenshot.png?raw=true "Sample Project Screenshot")
+Image Extensions for Swift 2.0
 
 
-UIImageView Extension
-=============================
-### Image from a URL
-```Swift
-imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
-// Fetches an image from a URL. The cached image is returned if available, otherise the placeholder is set until the backaground fetch returns a proper image.
-```
+![Sample Project Screenshot](https://raw.githubusercontent.com/melvitax/AFImageHelper/master/Screenshot.png?raw=true "Sample Project Screenshot")
 
-UIImage Extension
-=============================
+## Usage
+
+To run the example project, clone or download the repo, and run.
+
+
+## UIImageView Extension
+
 
 ### Image from a URL
 ```Swift
-UIImage.imageFromURL(url: String, placeholder: UIImage, shouldCacheImage: Bool = true, closure: (image: UIImage?) -> ()) -> UIImage?
+
 // Fetches an image from a URL. If caching is set, it will be cached by NSCache for future queries. The cached image is returned if available, otherise the placeholder is set. When the image is returned, the closure gets called.
+func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closure: ((image: UIImage?)
+
 ```
+
+## UIImage Extension
 
 ### Colors
 ```Swift
-UIImage(color:UIColor, size:CGSize)
+
 // Creates an image from a solid color
-UIImage(gradientColors:[UIColor], size:CGSize) 
+UIImage(color:UIColor, size:CGSize)
+
 // Creates an image from a gradient color
-func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode) -> UIImage 
+UIImage(gradientColors:[UIColor], size:CGSize) 
+
 // Applies a gradient overlay to an image
-UIImage(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint, radius:Float, size:CGSize)
+func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode) -> UIImage 
+
 // Creates an image from a radial gradient
+UIImage(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint, radius:Float, size:CGSize)
+
 ```
 
 ### Text
 ```Swift
-UIImage(text: String, font: UIFont, color: UIColor, backgroundColor: UIColor, size:CGSize, offset: CGPoint)
+
 // Creates an image with a string of text
+UIImage(text: String, font: UIFont, color: UIColor, backgroundColor: UIColor, size:CGSize, offset: CGPoint)
+
 ```
 
 ### Screenshot
 ```Swift
-UIImage(fromView view: UIView)
+
 // Creates an image from a UIView 
+UIImage(fromView view: UIView)
+
 ```
 
 
 ### Alpha and Padding
 ```Swift
-func hasAlpha() -> Bool
+
 // Returns true if the image has an alpha layer
-func applyAlpha() -> UIImage 
+func hasAlpha() -> Bool
+
 // Returns a copy(if needed) of the image with alpha layer 
-func applyPadding(padding: CGFloat) -> UIImage 
+func applyAlpha() -> UIImage? 
+
 // Returns a copy of the image with a transparent border of the given size added around its edges
-func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef 
+func applyPadding(padding: CGFloat) -> UIImage?
+
 ```
 
 ### Crop and Resize
 ```Swift
-func crop(bounds: CGRect) -> UIImage 
+
 // Crops an image to a new rect
-func cropToSquare() -> UIImage 
+func crop(bounds: CGRect) -> UIImage?
+
 // Crops an image to a centered square
-func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage 
+func cropToSquare() -> UIImage? {
+
 // Resizes an image
+func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage? 
+
 ```
 
 ### Circle and Rounded Corners
 ```Swift
-func roundCorners(cornerRadius:CGFloat) -> UIImage
+
 // Rounds corners of an image
-func roundCorners(cornerRadius:CGFloat, border:CGFloat, color:UIColor) -> UIImage
+func roundCorners(cornerRadius:CGFloat) -> UIImage?
+
 // Rounds corners of an image with border
-func roundCornersToCircle() -> UIImage
+func roundCorners(cornerRadius:CGFloat, border:CGFloat, color:UIColor) -> UIImage?
+
 // Rounds corners to a circle
-func roundCornersToCircle(#border:CGFloat, color:UIColor) -> UIImage
+func roundCornersToCircle() -> UIImage?
+
 // Rounds corners to a circle with border
+func roundCornersToCircle(border border:CGFloat, color:UIColor) -> UIImage?
+
 ```
 
 ### Border
 ```Swift
-func applyBorder(border:CGFloat, color:UIColor) -> UIImage {
+
 // Adds a border
+func applyBorder(border:CGFloat, color:UIColor) -> UIImage?
+
 ```
