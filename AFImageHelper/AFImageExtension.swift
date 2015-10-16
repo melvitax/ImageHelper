@@ -304,7 +304,8 @@ public extension UIImage {
     */
     func crop(bounds: CGRect) -> UIImage?
     {
-        return UIImage(CGImage: CGImageCreateWithImageInRect(self.CGImage, bounds)!)
+        return UIImage(CGImage: CGImageCreateWithImageInRect(self.CGImage, bounds)!,
+                       scale: 0.0, orientation: self.imageOrientation)
     }
     
     func cropToSquare() -> UIImage? {
