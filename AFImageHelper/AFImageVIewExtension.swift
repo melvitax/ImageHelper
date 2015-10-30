@@ -25,9 +25,9 @@ public extension UIImageView {
     :returns: UIImage?
     :discussion: If cached, the cached image is returned. Otherwise, a place holder is used until the image from web is returned by the closure.
     */
-    func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
+    func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
     {
-        self.image = UIImage.imageFromURL(url, placeholder: placeholder, shouldCacheImage: true) {
+        self.image = UIImage.imageFromURL(url, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
             (image: UIImage?) in
             if image == nil {
                 return
