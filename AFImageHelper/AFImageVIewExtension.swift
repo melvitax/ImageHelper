@@ -2,7 +2,7 @@
 //  AFImageViewExtension.swift
 //
 //  AFImageHelper
-//  Version 2.0.0
+//  Version 3.0.0
 //
 //  Created by Melvin Rivera on 7/23/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
