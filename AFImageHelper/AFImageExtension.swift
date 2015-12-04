@@ -523,7 +523,7 @@ public extension UIImage {
                         closure(image: nil)
                     }
                 }
-                if let image = UIImage(data: data!) {
+                if let data = data, image = UIImage(data: data) {
                     if shouldCacheImage {
                         UIImage.sharedCache().setObject(image, forKey: url)
                     }
