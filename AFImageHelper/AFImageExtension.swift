@@ -366,7 +366,7 @@ public extension UIImage {
         CGContextDrawImage(context, rect, self.CGImage)
         
         // Get the resized image from the context and a UIImage
-        let newImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        let newImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!, scale: self.scale, orientation: self.imageOrientation)
         return newImage;
     }
 
