@@ -309,6 +309,7 @@ public extension UIImage {
     }
     
     func cropToSquare() -> UIImage? {
+        let size = CGSizeMake(self.size.width * self.scale, self.size.height * self.scale)
         let shortest = min(size.width, size.height)
         let left: CGFloat = size.width > shortest ? (size.width-shortest)/2 : 0
         let top: CGFloat = size.height > shortest ? (size.height-shortest)/2 : 0
