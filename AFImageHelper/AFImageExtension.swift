@@ -2,7 +2,7 @@
 //  AFImageExtension.swift
 //
 //  AFImageHelper
-//  Version 3.0.0
+//  Version 3.0.1
 //
 //  Created by Melvin Rivera on 7/5/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
@@ -40,10 +40,10 @@ public extension UIImage {
     /**
     Creates a new solid color image.
     
-    :param: color :UIColor The color to fill the image with.
-    :param: size :CGSize Image size (defaults: 10x10)
+    - Parameter color: The color to fill the image with.
+    - Parameter size: Image size (defaults: 10x10)
     
-    :returns: UIImage
+    - Returns A new image
     */
     convenience init?(color:UIColor, size:CGSize = CGSizeMake(10, 10))
     {
@@ -60,10 +60,10 @@ public extension UIImage {
     /**
     Creates a gradient color image.
     
-    :param: gradientColors :[UIColor] The colors to use for the gradient.
-    :param: size :CGSize Image size (defaults: 10x10)
+    - Parameter gradientColors: An array of colors to use for the gradient.
+    - Parameter size: Image size (defaults: 10x10)
     
-    :returns: A new UIImage
+    - Returns A new image
     */
     convenience init?(gradientColors:[UIColor], size:CGSize = CGSizeMake(10, 10) )
     {
@@ -80,10 +80,10 @@ public extension UIImage {
     /**
     Applies gradient color overlay to an image.
     
-    :param: gradientColors :[UIColor] The colors to use for the gradient.
-    :param: blendMode :CGBlendMode The blending type to use.
+    - Parameter gradientColors: An array of colors to use for the gradient.
+    - Parameter blendMode: The blending type to use.
     
-    :returns: A new UIImage
+    - Returns A new image
     */
     func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
     {
@@ -110,14 +110,14 @@ public extension UIImage {
     /**
     Creates a text label image.
     
-    :param: text :String The text to use in the label.
-    :param: font :UIFont The font (default: System font of size 18)
-    :param: color :UIColor The text color (default: White)
-    :param: backgroundColor :UIColor The background color (default:Gray).
-    :param: size :CGSize Image size (default: 10x10)
-    :param: offset :CGPoint Center offset (default: 0x0)
+    - Parameter text: The text to use in the label.
+    - Parameter font: The font (default: System font of size 18)
+    - Parameter color: The text color (default: White)
+    - Parameter backgroundColor: The background color (default:Gray).
+    - Parameter size: Image size (default: 10x10)
+    - Parameter offset: Center offset (default: 0x0)
     
-    :returns: A new UIImage
+    - Returns A new image
     */
     convenience init?(text: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
     {
@@ -134,13 +134,13 @@ public extension UIImage {
         UIGraphicsEndImageContext()
     }
     
-    // MARK: Image from uiview
+    // MARK: Image from UIView
     /**
-    Creates an image from a View.
+    Creates an image from a UIView.
     
-    :param: fromView :UIView The source view.
+    - Parameter fromView: The source view.
     
-    :returns: A new UIImage
+    - Returns A new image
     */
     convenience init?(fromView view: UIView) {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
@@ -151,17 +151,17 @@ public extension UIImage {
     }
     
     // MARK: Image with Radial Gradient
+    // Radial background originally from: http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
     /**
     Creates a radial gradient.
     
-    :param: startColor :UIColor The start color
-    :param: endColor :UIColor The end color
-    :param: radialGradientCenter :CGPoint The gradient center (default:0.5,0.5).
-    :param: radius :CGPoint Radius size (default: 0.5)
-    :param: size :CGSize Image size (default: 100x100)
+    - Parameter startColor: The start color
+    - Parameter endColor: The end color
+    - Parameter radialGradientCenter: The gradient center (default:0.5,0.5).
+    - Parameter radius: Radius size (default: 0.5)
+    - Parameter size: Image size (default: 100x100)
     
-    :returns: A new UIImage
-    :discussion: Radial background originally from: http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
+    - Returns A new image
     */
     convenience init?(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint = CGPoint(x: 0.5, y: 0.5), radius:Float = 0.5, size:CGSize = CGSizeMake(100, 100))
     {
@@ -195,8 +195,6 @@ public extension UIImage {
     
     /**
     Returns true if the image has an alpha layer.
-
-    :returns: Bool
     */
     func hasAlpha() -> Bool
     {
@@ -212,8 +210,6 @@ public extension UIImage {
     
     /**
     Returns a copy of the given image, adding an alpha channel if it doesn't already have one.
-    
-    :returns: UIImage?
     */
     func applyAlpha() -> UIImage?
     {
@@ -239,9 +235,9 @@ public extension UIImage {
     /**
     Returns a copy of the image with a transparent border of the given size added around its edges. i.e. For rotating an image without getting jagged edges.
     
-    :param: padding :CGFloat The padding amount.
+    - Parameter padding: The padding amount.
     
-    :returns: UIImage?
+    - Returns A new image.
     */
     func applyPadding(padding: CGFloat) -> UIImage?
     {
@@ -270,10 +266,10 @@ public extension UIImage {
     /**
     Creates a mask that makes the outer edges transparent and everything else opaque. The size must include the entire mask (opaque part + transparent border).
     
-    :param: padding :CGFloat The padding amount.
-    :param: size :CGSize The size of the image.
+    - Parameter padding: The padding amount.
+    - Parameter size: The size of the image.
     
-    :returns: CGImageRef
+    - Returns A Core Graphics Image Ref
     */
     private func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef
     {
@@ -298,9 +294,9 @@ public extension UIImage {
     /**
     Creates a cropped copy of an image.
     
-    :param: bounds :CGRect The bounds of the rectangle inside the image.
+    - Parameter bounds: The bounds of the rectangle inside the image.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func crop(bounds: CGRect) -> UIImage?
     {
@@ -323,10 +319,10 @@ public extension UIImage {
     /**
     Creates a resized copy of an image.
     
-    :param: size :CGSize The new size of the image.
-    :param: contentMode :UIImageContentMode The way to handle the content in the new size.
+    - Parameter size: The new size of the image.
+    - Parameter contentMode: The way to handle the content in the new size.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage?
     {
@@ -377,9 +373,9 @@ public extension UIImage {
     /**
     Creates a new image with rounded corners.
     
-    :param: cornerRadius :CGFloat The corner radius.
+    - Parameter cornerRadius: The corner radius.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func roundCorners(cornerRadius:CGFloat) -> UIImage?
     {
@@ -426,11 +422,11 @@ public extension UIImage {
     /**
     Creates a new image with rounded corners and border.
     
-    :param: cornerRadius :CGFloat The corner radius.
-    :param: border :CGFloat The size of the border.
-    :param: color :UIColor The color of the border.
+    - Parameter cornerRadius: The corner radius.
+    - Parameter border: The size of the border.
+    - Parameter color: The color of the border.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func roundCorners(cornerRadius:CGFloat, border:CGFloat, color:UIColor) -> UIImage?
     {
@@ -440,7 +436,7 @@ public extension UIImage {
     /**
     Creates a new circle image.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func roundCornersToCircle() -> UIImage?
     {
@@ -451,10 +447,10 @@ public extension UIImage {
     /**
     Creates a new circle image with a border.
     
-    :param: border :CGFloat The size of the border.
-    :param: color :UIColor The color of the border.
+    - Parameter border :CGFloat The size of the border.
+    - Parameter color :UIColor The color of the border.
     
-    :returns: UIImage?
+    - Returns UIImage?
     */
     func roundCornersToCircle(border border:CGFloat, color:UIColor) -> UIImage?
     {
@@ -467,10 +463,10 @@ public extension UIImage {
     /**
     Creates a new image with a border.
     
-    :param: border :CGFloat The size of the border.
-    :param: color :UIColor The color of the border.
+    - Parameter border: The size of the border.
+    - Parameter color: The color of the border.
     
-    :returns: UIImage?
+    - Returns A new image
     */
     func applyBorder(border:CGFloat, color:UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -496,15 +492,14 @@ public extension UIImage {
     // MARK: Image From URL
     
     /**
-    Creates a new image from a URL with optional caching.
+    Creates a new image from a URL with optional caching. If cached, the cached image is returned. Otherwise, a place holder is used until the image from web is returned by the closure.
     
-    :param: url :String The image URL.
-    :param: placeholder :UIImage The placeholder image.
-    :param: shouldCacheImage :Bool Weather or not we should cache the NSURL response (default: true)
-    :param: closure :(image: UIImage?) The image from the web the first time is fetched.
+    - Parameter url: The image URL.
+    - Parameter placeholder: The placeholder image.
+    - Parameter shouldCacheImage: Weather or not we should cache the NSURL response (default: true)
+    - Parameter closure: Returns the image from the web the first time is fetched.
     
-    :returns: UIImage?
-    :discussion: If cached, the cached image is returned. Otherwise, a place holder is used until the image from web is returned by the closure.
+    - Returns A new image
     */
     class func imageFromURL(url: String, placeholder: UIImage, shouldCacheImage: Bool = true, closure: (image: UIImage?) -> ()) -> UIImage?
     {

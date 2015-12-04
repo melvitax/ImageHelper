@@ -2,7 +2,7 @@
 //  AFImageViewExtension.swift
 //
 //  AFImageHelper
-//  Version 3.0.0
+//  Version 3.0.1
 //
 //  Created by Melvin Rivera on 7/23/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
@@ -15,15 +15,14 @@ import QuartzCore
 public extension UIImageView {
     
     /**
-    Loads an image from a URL.
+    Loads an image from a URL. If cached, the cached image is returned. Otherwise, a place holder is used until the image from web is returned by the closure.
     
-    :param: url :String The image URL.
-    :param: placeholder :UIImage The placeholder image.
-    :param: fadeIn :Bool Weather the mage should fade in.
-    :param: closure :(image: UIImage?) The image from the web the first time is fetched.
+    - Parameter url: The image URL.
+    - Parameter placeholder: The placeholder image.
+    - Parameter fadeIn: Weather the mage should fade in.
+    - Parameter closure: Returns the image from the web the first time is fetched.
     
-    :returns: UIImage?
-    :discussion: If cached, the cached image is returned. Otherwise, a place holder is used until the image from web is returned by the closure.
+    - Returns A new image
     */
     func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
     {
