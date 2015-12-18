@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
     s.name             = "AFImageHelper"
-    s.version          = "3.0.1"
+    s.version          = "3.0.2"
     s.summary          = "Image Extensions for Swift 2.0"
     s.description      = <<-DESC
 A collection of extensions for handling image creation from colors and gradients; Manipulating by cropping and scaling; Background fetching from the web with support for caching.

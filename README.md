@@ -19,7 +19,6 @@ To run the example project, clone or download the repo, and run.
 
 ### Image from a URL
 ```Swift
-
 // Fetches an image from a URL. If caching is set, it will be cached by NSCache for future queries. The cached image is returned if available, otherise the placeholder is set. When the image is returned, the closure gets called.
 func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closure: ((image: UIImage?)
 
@@ -29,7 +28,6 @@ func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closur
 
 ### Colors
 ```Swift
-
 // Creates an image from a solid color
 UIImage(color:UIColor, size:CGSize)
 
@@ -46,7 +44,6 @@ UIImage(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint, r
 
 ### Text
 ```Swift
-
 // Creates an image with a string of text
 UIImage(text: String, font: UIFont, color: UIColor, backgroundColor: UIColor, size:CGSize, offset: CGPoint)
 
@@ -54,7 +51,6 @@ UIImage(text: String, font: UIFont, color: UIColor, backgroundColor: UIColor, si
 
 ### Screenshot
 ```Swift
-
 // Creates an image from a UIView 
 UIImage(fromView view: UIView)
 
@@ -63,7 +59,6 @@ UIImage(fromView view: UIView)
 
 ### Alpha and Padding
 ```Swift
-
 // Returns true if the image has an alpha layer
 func hasAlpha() -> Bool
 
@@ -77,7 +72,6 @@ func applyPadding(padding: CGFloat) -> UIImage?
 
 ### Crop and Resize
 ```Swift
-
 // Crops an image to a new rect
 func crop(bounds: CGRect) -> UIImage?
 
@@ -91,7 +85,6 @@ func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIIm
 
 ### Circle and Rounded Corners
 ```Swift
-
 // Rounds corners of an image
 func roundCorners(cornerRadius:CGFloat) -> UIImage?
 
@@ -108,8 +101,16 @@ func roundCornersToCircle(border border:CGFloat, color:UIColor) -> UIImage?
 
 ### Border
 ```Swift
-
 // Adds a border
 func applyBorder(border:CGFloat, color:UIColor) -> UIImage?
+
+```
+
+### Screen Density
+```Swift
+// To create an image that is Retina aware, use the screen scale as a multiplier for your size. You should also use this technique for padding or borders.
+let width = 140 * UIScreen.mainScreen().scale
+let height = 140 * UIScreen.mainScreen().scale
+let image = UIImage(named: "myImage")?.resize(CGSize(width: width, height: height))
 
 ```

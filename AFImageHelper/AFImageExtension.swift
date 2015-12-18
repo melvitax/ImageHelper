@@ -2,7 +2,7 @@
 //  AFImageExtension.swift
 //
 //  AFImageHelper
-//  Version 3.0.1
+//  Version 3.0.2
 //
 //  Created by Melvin Rivera on 7/5/14.
 //  Copyright (c) 2014 All Forces. All rights reserved.
@@ -22,8 +22,8 @@ public enum UIImageContentMode {
 public extension UIImage {
     
     /**
-    A singleton shared NSURL cache used for images from URL
-    */
+     A singleton shared NSURL cache used for images from URL
+     */
     private class func sharedCache() -> NSCache!
     {
         struct StaticSharedCache {
@@ -78,13 +78,13 @@ public extension UIImage {
     }
     
     /**
-    Applies gradient color overlay to an image.
-    
-    - Parameter gradientColors: An array of colors to use for the gradient.
-    - Parameter blendMode: The blending type to use.
-    
-    - Returns A new image
-    */
+     Applies gradient color overlay to an image.
+     
+     - Parameter gradientColors: An array of colors to use for the gradient.
+     - Parameter blendMode: The blending type to use.
+     
+     - Returns A new image
+     */
     func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
     {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
@@ -121,15 +121,15 @@ public extension UIImage {
     */
     convenience init?(text: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
     {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        label.font = font
+        label.text = text
+        label.textColor = color
+        label.textAlignment = .Center
+        label.backgroundColor = backgroundColor
+        let image = UIImage(fromView: label)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, backgroundColor.CGColor)
-        CGContextFillRect(context, CGRect(origin: CGPoint(x: 0, y: 0), size: size))
-        let style = NSMutableParagraphStyle()
-        style.alignment = .Center
-        let attr = [NSFontAttributeName:font, NSForegroundColorAttributeName:color, NSParagraphStyleAttributeName:style]
-        let rect = CGRect(x: offset.x, y: offset.y, width: size.width, height: size.height)
-        text.drawInRect(rect, withAttributes: attr)
+        image?.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
         self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
         UIGraphicsEndImageContext()
     }
@@ -209,8 +209,8 @@ public extension UIImage {
     }
     
     /**
-    Returns a copy of the given image, adding an alpha channel if it doesn't already have one.
-    */
+     Returns a copy of the given image, adding an alpha channel if it doesn't already have one.
+     */
     func applyAlpha() -> UIImage?
     {
         if hasAlpha() {
@@ -233,12 +233,12 @@ public extension UIImage {
     }
     
     /**
-    Returns a copy of the image with a transparent border of the given size added around its edges. i.e. For rotating an image without getting jagged edges.
-    
-    - Parameter padding: The padding amount.
-    
-    - Returns A new image.
-    */
+     Returns a copy of the image with a transparent border of the given size added around its edges. i.e. For rotating an image without getting jagged edges.
+     
+     - Parameter padding: The padding amount.
+     
+     - Returns A new image.
+     */
     func applyPadding(padding: CGFloat) -> UIImage?
     {
         // If the image does not have an alpha layer, add one
@@ -262,15 +262,15 @@ public extension UIImage {
         let transparentImage = UIImage(CGImage: CGImageCreateWithMask(CGBitmapContextCreateImage(context), imageRefWithPadding(padding, size: rect.size))!)
         return transparentImage
     }
-
+    
     /**
-    Creates a mask that makes the outer edges transparent and everything else opaque. The size must include the entire mask (opaque part + transparent border).
-    
-    - Parameter padding: The padding amount.
-    - Parameter size: The size of the image.
-    
-    - Returns A Core Graphics Image Ref
-    */
+     Creates a mask that makes the outer edges transparent and everything else opaque. The size must include the entire mask (opaque part + transparent border).
+     
+     - Parameter padding: The padding amount.
+     - Parameter size: The size of the image.
+     
+     - Returns A Core Graphics Image Ref
+     */
     private func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef
     {
         // Build a context that's the same dimensions as the new size
@@ -288,7 +288,7 @@ public extension UIImage {
         return maskImageRef!
     }
     
-
+    
     // MARK: Crop
     
     /**
@@ -301,7 +301,7 @@ public extension UIImage {
     func crop(bounds: CGRect) -> UIImage?
     {
         return UIImage(CGImage: CGImageCreateWithImageInRect(self.CGImage, bounds)!,
-                       scale: 0.0, orientation: self.imageOrientation)
+            scale: 0.0, orientation: self.imageOrientation)
     }
     
     func cropToSquare() -> UIImage? {
@@ -331,15 +331,15 @@ public extension UIImage {
         var ratio: CGFloat!
         
         switch contentMode {
-            case .ScaleToFill:
-                ratio = 1
-            case .ScaleAspectFill:
-                ratio = max(horizontalRatio, verticalRatio)
-            case .ScaleAspectFit:
-                ratio = min(horizontalRatio, verticalRatio)
+        case .ScaleToFill:
+            ratio = 1
+        case .ScaleAspectFill:
+            ratio = max(horizontalRatio, verticalRatio)
+        case .ScaleAspectFit:
+            ratio = min(horizontalRatio, verticalRatio)
         }
         
-        let rect = CGRect(x: 0, y: 0, width: self.size.width * ratio, height: self.size.height * ratio)
+        let rect = CGRect(x: 0, y: 0, width: size.width * ratio, height: size.height * ratio)
         
         // Fix for a colorspace / transparency issue that affects some types of
         // images. See here: http://vocaro.com/trevor/blog/2009/10/12/resize-a-uiimage-the-right-way/comment-page-2/#comment-39951
@@ -358,7 +358,7 @@ public extension UIImage {
         
         
         //CGContextSetInterpolationQuality(context, CGInterpolationQuality(kCGInterpolationHigh.value))
-                
+        
         // Draw into the context; this scales the image
         CGContextDrawImage(context, rect, self.CGImage)
         
@@ -366,7 +366,7 @@ public extension UIImage {
         let newImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!, scale: self.scale, orientation: self.imageOrientation)
         return newImage;
     }
-
+    
     
     // MARK: Corner Radius
     
@@ -392,7 +392,7 @@ public extension UIImage {
         let colorSpace = CGImageGetColorSpace(imageWithAlpha?.CGImage)
         let bitmapInfo = CGImageGetBitmapInfo(imageWithAlpha?.CGImage)
         let context = CGBitmapContextCreate(nil, width, height, bits, 0, colorSpace, bitmapInfo.rawValue)
-        let rect = CGRect(x: 0, y: 0, width: size.width*scale, height: size.height*scale)
+        let rect = CGRect(x: 0, y: 0, width: CGFloat(width)*scale, height: CGFloat(height)*scale)
         
         CGContextBeginPath(context)
         if (cornerRadius == 0) {
@@ -420,24 +420,24 @@ public extension UIImage {
     }
     
     /**
-    Creates a new image with rounded corners and border.
-    
-    - Parameter cornerRadius: The corner radius.
-    - Parameter border: The size of the border.
-    - Parameter color: The color of the border.
-    
-    - Returns A new image
-    */
+     Creates a new image with rounded corners and border.
+     
+     - Parameter cornerRadius: The corner radius.
+     - Parameter border: The size of the border.
+     - Parameter color: The color of the border.
+     
+     - Returns A new image
+     */
     func roundCorners(cornerRadius:CGFloat, border:CGFloat, color:UIColor) -> UIImage?
     {
         return roundCorners(cornerRadius)?.applyBorder(border, color: color)
     }
     
     /**
-    Creates a new circle image.
-    
-    - Returns A new image
-    */
+     Creates a new circle image.
+     
+     - Returns A new image
+     */
     func roundCornersToCircle() -> UIImage?
     {
         let shortest = min(size.width, size.height)
@@ -445,13 +445,13 @@ public extension UIImage {
     }
     
     /**
-    Creates a new circle image with a border.
-    
-    - Parameter border :CGFloat The size of the border.
-    - Parameter color :UIColor The color of the border.
-    
-    - Returns UIImage?
-    */
+     Creates a new circle image with a border.
+     
+     - Parameter border :CGFloat The size of the border.
+     - Parameter color :UIColor The color of the border.
+     
+     - Returns UIImage?
+     */
     func roundCornersToCircle(border border:CGFloat, color:UIColor) -> UIImage?
     {
         let shortest = min(size.width, size.height)
@@ -532,5 +532,5 @@ public extension UIImage {
         }
         return placeholder
     }
-   
+    
 }

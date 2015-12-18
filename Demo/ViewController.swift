@@ -21,8 +21,8 @@ class Cell: UICollectionViewCell {
 
 class ViewController: UICollectionViewController {
     
-    let imageWidth = 140.0
-    let imageHeight = 140.0
+    let imageWidth = 140 * UIScreen.mainScreen().scale
+    let imageHeight = 140 * UIScreen.mainScreen().scale
     
     var sections = [String]()
     var items = [[CellItem]]()
@@ -52,7 +52,8 @@ class ViewController: UICollectionViewController {
         // Text
         sections.append("Text")
         var text = [CellItem]()
-        if let image = UIImage(text: "M", font: UIFont.systemFontOfSize(64), color: UIColor.whiteColor(), backgroundColor: UIColor.redColor(), size: CGSize(width: imageWidth, height: imageHeight), offset: CGPoint(x: 0.0, y: 30.0)) {
+        let textSize = 64 * UIScreen.mainScreen().scale
+        if let image = UIImage(text: "M", font: UIFont.systemFontOfSize(textSize), color: UIColor.whiteColor(), backgroundColor: UIColor.redColor(), size: CGSize(width: imageWidth, height: imageHeight))?.roundCornersToCircle() {
             text.append(CellItem(text: "Text Image", image: image))
         }
         items.append(text)
@@ -63,10 +64,11 @@ class ViewController: UICollectionViewController {
         if let image = UIImage(named: "beach")?.roundCornersToCircle() {
             corners.append(CellItem(text: "Circle", image: image))
         }
-        if let image = UIImage(named: "beach")?.roundCornersToCircle(border: 60.0, color: UIColor.grayColor()) {
+        let border = 12 * UIScreen.mainScreen().scale
+        if let image = UIImage(named: "beach")?.roundCornersToCircle(border: border, color: UIColor.lightGrayColor()) {
             corners.append(CellItem(text: "Circle + Border", image: image))
         }
-        if let image = UIImage(named: "beach")?.roundCorners(12.0) {
+        if let image = UIImage(named: "beach")?.roundCorners(12) {
             corners.append(CellItem(text: "Round Corners", image: image))
         }
         items.append(corners)
@@ -75,7 +77,7 @@ class ViewController: UICollectionViewController {
         // Cropping
         sections.append("Cropping")
         var cropping = [CellItem]()
-        if let image = UIImage(named: "beach")?.crop(CGRect(x: 40.0, y: 40.0, width: 320.0, height: 100.0))?.applyPadding(6.0) {
+        if let image = UIImage(named: "beach")?.crop(CGRect(x: 40.0, y: 40.0, width: imageWidth, height: imageHeight/2)) {
             cropping.append(CellItem(text: "Crop + Resize", image: image))
         }
         items.append(cropping)
