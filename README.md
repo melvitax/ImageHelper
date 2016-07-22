@@ -107,7 +107,7 @@ func applyBorder(border:CGFloat, color:UIColor) -> UIImage?
 ```
 
 ### Image Effects
-
+```Swift
 // Applies a light blur effect to the image
 func applyLightEffect() -> UIImage? 
 // Applies a extra light blur effect to the image
