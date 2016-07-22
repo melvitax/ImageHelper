@@ -1,7 +1,12 @@
 # Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-.DS_Store
+## Build generated
 build/
+DerivedData/
+
+## Various settings
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -10,15 +15,9 @@ build/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
 xcuserdata/
-profile
-*.moved-aside
-DerivedData
-.idea/
 
 ## Other
-*.xccheckout
 *.moved-aside
-*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
