@@ -111,6 +111,7 @@ public extension UIImage {
      Applies gradient color overlay to an image.
 
      - Parameter gradientColors: An array of colors to use for the gradient.
+     - Parameter locations: An array of locations to use for the gradient.
      - Parameter blendMode: The blending type to use.
 
      - Returns A new image
