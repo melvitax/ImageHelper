@@ -43,6 +43,9 @@ class ViewController: UICollectionViewController {
         if let image = UIImage(named: "beach")?.applyGradientColors([UIColor(red: 0.996, green: 0.769, blue: 0.494, alpha: 1.0), UIColor(red: 0.969, green: 0.608, blue: 0.212, alpha: 0.2)]) {
             colors.append(CellItem(text: "Gradient Overlay", image: image))
         }
+        if let image = UIImage(named: "beach")?.applyGradientColors([UIColor.redColor(), UIColor.greenColor(), UIColor.blueColor()], locations: [0, 0.25, 0.99], blendMode: .Normal) {
+          colors.append(CellItem(text: "Gradient More", image: image))
+        }
         if let image = UIImage(startColor: UIColor(red: 0.996, green: 1.0, blue: 1.0, alpha: 1.0), endColor: UIColor(red: 0.627, green: 0.835, blue: 0.922, alpha: 1.0), radialGradientCenter: CGPoint(x: 0.5, y: 0.5), radius: 0.5, size: CGSize(width: imageWidth, height: imageHeight)) {
             colors.append(CellItem(text: "Radial Gradient", image: image))
         }

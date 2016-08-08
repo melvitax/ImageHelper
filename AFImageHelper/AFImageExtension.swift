@@ -106,11 +106,41 @@ public extension UIImage {
         UIGraphicsEndImageContext();
         return image;
     }
-    
+
+    /**
+     Applies gradient color overlay to an image.
+
+     - Parameter gradientColors: An array of colors to use for the gradient.
+     - Parameter blendMode: The blending type to use.
+
+     - Returns A new image
+     */
+    func applyGradientColors(gradientColors: [UIColor], locations: [Float], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
+    {
+      UIGraphicsBeginImageContextWithOptions(size, false, scale)
+      let context = UIGraphicsGetCurrentContext()
+      CGContextTranslateCTM(context, 0, size.height)
+      CGContextScaleCTM(context, 1.0, -1.0)
+      CGContextSetBlendMode(context, blendMode)
+      let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+      CGContextDrawImage(context, rect, self.CGImage)
+      // Create gradient
+      let colorSpace = CGColorSpaceCreateDeviceRGB()
+      let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
+      let cgLocations = locations.map { CGFloat($0) }
+      let gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)
+      // Apply gradient
+      CGContextClipToMask(context, rect, self.CGImage)
+      CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
+      let image = UIGraphicsGetImageFromCurrentImageContext()
+      UIGraphicsEndImageContext();
+      return image;
+    }
+
     // MARK: Image with Text
     /**
      Creates a text label image.
-     
+
      - Parameter text: The text to use in the label.
      - Parameter font: The font (default: System font of size 18)
      - Parameter color: The text color (default: White)
