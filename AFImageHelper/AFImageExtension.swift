@@ -72,11 +72,13 @@ public extension UIImage {
         let context = UIGraphicsGetCurrentContext()
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
-        var cgLocations: [CGFloat]! = nil
+        let gradient: CGGradient
         if locations.count > 0 {
-          cgLocations = locations.map { CGFloat($0) }
+          let cgLocations = locations.map { CGFloat($0) }
+          gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+        } else {
+          gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
         }
-        let gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)
         CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
         self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
         UIGraphicsEndImageContext()
@@ -103,11 +105,13 @@ public extension UIImage {
       // Create gradient
       let colorSpace = CGColorSpaceCreateDeviceRGB()
       let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
-      var cgLocations: [CGFloat]! = nil
+      let gradient: CGGradient
       if locations.count > 0 {
-        cgLocations = locations.map { CGFloat($0) }
+        let cgLocations = locations.map { CGFloat($0) }
+        gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+      } else {
+        gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
       }
-      let gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)
       // Apply gradient
       CGContextClipToMask(context, rect, self.CGImage)
       CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
