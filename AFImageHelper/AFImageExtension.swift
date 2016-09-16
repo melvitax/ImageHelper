@@ -62,15 +62,21 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(gradientColors: [UIColor], size: CGSize = CGSize(width: 10, height: 10)) {
+    convenience init?(gradientColors:[UIColor], size:CGSize = CGSize(width: 10, height: 10), locations: [Float] = [] )
+    {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.cgColor as AnyObject! } as NSArray
-        let gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)
-        context?.drawLinearGradient(gradient!, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
-        
+        let gradient: CGGradient
+        if locations.count > 0 {
+          let cgLocations = locations.map { CGFloat($0) }
+          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
+        } else {
+          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
+        }
+        context!.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
         self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
@@ -84,30 +90,32 @@ public extension UIImage {
 
      - Returns A new image
      */
-    func apply(gradientColors: [UIColor], blendMode: CGBlendMode = CGBlendMode.normal) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        
-        let context = UIGraphicsGetCurrentContext()
-        context?.translateBy(x: 0, y: size.height)
-        context?.scaleBy(x: 1.0, y: -1.0)
-        context?.setBlendMode(blendMode)
-        
-        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        context?.draw(self.cgImage!, in: rect)
-        
-        // Create gradient
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.cgColor as AnyObject! } as NSArray
-        let gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)
-        
-        // Apply gradient
-        context?.clip(to: rect, mask: self.cgImage!)
-        context?.drawLinearGradient(gradient!, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image!
+    func apply(gradientColors: [UIColor], locations: [Float] = [], blendMode: CGBlendMode = CGBlendMode.normal) -> UIImage
+    {
+      UIGraphicsBeginImageContextWithOptions(size, false, scale)
+      let context = UIGraphicsGetCurrentContext()
+      context?.translateBy(x: 0, y: size.height)
+      context?.scaleBy(x: 1.0, y: -1.0)
+      context?.setBlendMode(blendMode)
+      let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+    
+      context?.draw(self.cgImage!, in: rect)
+      // Create gradient
+      let colorSpace = CGColorSpaceCreateDeviceRGB()
+      let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.cgColor as AnyObject! } as NSArray
+      let gradient: CGGradient
+      if locations.count > 0 {
+        let cgLocations = locations.map { CGFloat($0) }
+        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
+      } else {
+        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
+      }
+      // Apply gradient
+      context?.clip(to: rect, mask: self.cgImage!)
+      context?.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
+      let image = UIGraphicsGetImageFromCurrentImageContext()
+      UIGraphicsEndImageContext();
+      return image!;
     }
 
     // MARK: Image with Text
