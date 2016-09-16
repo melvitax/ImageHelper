@@ -8,27 +8,26 @@
 #
 
 Pod::Spec.new do |s|
-    s.name             = "AFImageHelper"
-    s.version          = "3.1.0"
-    s.summary          = "Image Extensions for Swift 2.0"
-    s.description      = <<-DESC
+    s.name = "AFImageHelper"
+    s.version = "3.2.0"
+    s.summary = "Image Extensions for Swift 3.0"
+    s.description = <<-DESC
 A collection of extensions for handling image creation from colors and gradients; Manipulating by cropping and scaling; Background fetching from the web with support for caching.
     DESC
-    s.homepage         = "https://github.com/melvitax/AFImageHelper"
-    s.screenshots     = "https://raw.githubusercontent.com/melvitax/AFImageHelper/master/Screenshot.png"
-    s.license          = 'MIT'
-    s.author           = { "Melvin Rivera" => "melvin@allforces.com" }
-    s.source           = { :git => "https://github.com/melvitax/AFImageHelper.git", :tag => s.version.to_s }
-    # s.social_media_url = 'https://twitter.com/melvitax'
+    s.homepage = "https://github.com/melvitax/ImageHelper"
+    s.screenshots = "https://raw.githubusercontent.com/melvitax/ImageHelper/master/Screenshot.png"
+    s.license = 'MIT'
+    s.author = { "Melvin Rivera" => "melvitax@gmail.com" }
+    s.source = { :git => "https://github.com/melvitax/ImageHelper.git", :tag => s.version.to_s }
+    s.social_media_url = 'https://twitter.com/melvitax'
 
-    s.platform     = :ios, '8.0'
-    s.requires_arc = true
+    s.platforms = { :ios => '8.4', :tvos => '9.0',  :watchos => '2.0' }
+    s.ios.deployment_target = "8.4"
+    s.watchos.deployment_target = "2.0"
+    s.tvos.deployment_target = "9.0"
 
-    s.source_files = 'AFImageHelper/**/*'
-    #s.resource_bundles = {}
+    s.xcconfig = { 'SWIFT_VERSION' => '3.0' }
 
-    # s.public_header_files
-    # s.frameworks = 'QuartzCore'
-    # s.dependency
+    s.source_files = "Sources/**/*.{h,swift}"
+
 end
-

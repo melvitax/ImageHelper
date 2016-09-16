@@ -1,10 +1,10 @@
-# AFImageHelper
+# ImageHelper
 
 [![Version](https://img.shields.io/cocoapods/v/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 [![License](https://img.shields.io/cocoapods/l/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 [![Platform](https://img.shields.io/cocoapods/p/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 
-Image Extensions for Swift 2.0
+Image Extensions for Swift 3.0
 
 
 ![Sample Project Screenshot](https://raw.githubusercontent.com/melvitax/AFImageHelper/master/Screenshot.png?raw=true "Sample Project Screenshot")
@@ -32,10 +32,10 @@ func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, closur
 UIImage(color:UIColor, size:CGSize)
 
 // Creates an image from a gradient color
-UIImage(gradientColors:[UIColor], size:CGSize) 
+UIImage(gradientColors:[UIColor], size:CGSize)
 
 // Applies a gradient overlay to an image
-func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode) -> UIImage 
+func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode) -> UIImage
 
 // Creates an image from a radial gradient
 UIImage(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint, radius:Float, size:CGSize)
@@ -51,7 +51,7 @@ UIImage(text: String, font: UIFont, color: UIColor, backgroundColor: UIColor, si
 
 ### Screenshot
 ```Swift
-// Creates an image from a UIView 
+// Creates an image from a UIView
 UIImage(fromView view: UIView)
 
 ```
@@ -62,8 +62,8 @@ UIImage(fromView view: UIView)
 // Returns true if the image has an alpha layer
 func hasAlpha() -> Bool
 
-// Returns a copy(if needed) of the image with alpha layer 
-func applyAlpha() -> UIImage? 
+// Returns a copy(if needed) of the image with alpha layer
+func applyAlpha() -> UIImage?
 
 // Returns a copy of the image with a transparent border of the given size added around its edges
 func applyPadding(padding: CGFloat) -> UIImage?
@@ -79,7 +79,7 @@ func crop(bounds: CGRect) -> UIImage?
 func cropToSquare() -> UIImage? {
 
 // Resizes an image
-func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage? 
+func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage?
 
 ```
 
@@ -109,15 +109,15 @@ func applyBorder(border:CGFloat, color:UIColor) -> UIImage?
 ### Image Effects
 ```Swift
 // Applies a light blur effect to the image
-func applyLightEffect() -> UIImage? 
+func applyLightEffect() -> UIImage?
 // Applies a extra light blur effect to the image
-func applyExtraLightEffect() -> UIImage? 
+func applyExtraLightEffect() -> UIImage?
 // Applies a dark blur effect to the image
-func applyDarkEffect() -> UIImage? 
+func applyDarkEffect() -> UIImage?
 // Applies a color tint to an image
-func applyTintEffect(tintColor: UIColor) -> UIImage? 
+func applyTintEffect(tintColor: UIColor) -> UIImage?
 // Applies a blur to an image based on the specified radius, tint color saturation and mask image
-func applyBlur(blurRadius:CGFloat, tintColor:UIColor?, saturationDeltaFactor:CGFloat, maskImage:UIImage? = nil) -> UIImage? 
+func applyBlur(blurRadius:CGFloat, tintColor:UIColor?, saturationDeltaFactor:CGFloat, maskImage:UIImage? = nil) -> UIImage?
 
 ```
 
