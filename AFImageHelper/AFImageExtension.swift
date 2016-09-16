@@ -16,25 +16,20 @@ import Accelerate
 
 
 public enum UIImageContentMode {
-    case ScaleToFill, ScaleAspectFit, ScaleAspectFill
+    case scaleToFill, scaleAspectFit, scaleAspectFill
 }
-
 
 public extension UIImage {
     
     /**
      A singleton shared NSURL cache used for images from URL
      */
-    private class func sharedCache() -> NSCache!
-    {
+    static var shared: NSCache<AnyObject, AnyObject>! {
         struct StaticSharedCache {
-            static var sharedCache: NSCache? = nil
-            static var onceToken: dispatch_once_t = 0
+            static var shared: NSCache<AnyObject, AnyObject>? = NSCache()
         }
-        dispatch_once(&StaticSharedCache.onceToken) {
-            StaticSharedCache.sharedCache = NSCache()
-        }
-        return StaticSharedCache.sharedCache!
+        
+        return StaticSharedCache.shared!
     }
     
     // MARK: Image from solid color
@@ -46,18 +41,19 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(color:UIColor, size:CGSize = CGSizeMake(10, 10))
-    {
+    convenience init?(color: UIColor, size: CGSize = CGSize(width: 10, height: 10)) {
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
+        
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
-        self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        context?.setFillColor(color.cgColor)
+        context?.fill(rect)
+        
+        self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
     
-    // MARK:  Image from gradient colors
+    // MARK: Image from gradient colors
     /**
      Creates a gradient color image.
      
@@ -66,21 +62,22 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(gradientColors:[UIColor], size:CGSize = CGSizeMake(10, 10), locations: [Float] = [] )
+    convenience init?(gradientColors:[UIColor], size:CGSize = CGSize(width: 10, height: 10), locations: [Float] = [] )
     {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
+        
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
+        let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.cgColor as AnyObject! } as NSArray
         let gradient: CGGradient
         if locations.count > 0 {
           let cgLocations = locations.map { CGFloat($0) }
-          gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
         } else {
-          gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
+          gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
         }
-        CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
-        self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        context!.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
+        self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
 
@@ -93,31 +90,32 @@ public extension UIImage {
 
      - Returns A new image
      */
-    func applyGradientColors(gradientColors: [UIColor], locations: [Float] = [], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
+    func apply(gradientColors: [UIColor], locations: [Float] = [], blendMode: CGBlendMode = CGBlendMode.normal) -> UIImage
     {
       UIGraphicsBeginImageContextWithOptions(size, false, scale)
       let context = UIGraphicsGetCurrentContext()
-      CGContextTranslateCTM(context, 0, size.height)
-      CGContextScaleCTM(context, 1.0, -1.0)
-      CGContextSetBlendMode(context, blendMode)
+      context?.translateBy(x: 0, y: size.height)
+      context?.scaleBy(x: 1.0, y: -1.0)
+      context?.setBlendMode(blendMode)
       let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-      CGContextDrawImage(context, rect, self.CGImage)
+    
+      context?.draw(self.cgImage!, in: rect)
       // Create gradient
       let colorSpace = CGColorSpaceCreateDeviceRGB()
-      let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
+      let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.cgColor as AnyObject! } as NSArray
       let gradient: CGGradient
       if locations.count > 0 {
         let cgLocations = locations.map { CGFloat($0) }
-        gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: cgLocations)!
       } else {
-        gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
+        gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: nil)!
       }
       // Apply gradient
-      CGContextClipToMask(context, rect, self.CGImage)
-      CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
+      context?.clip(to: rect, mask: self.cgImage!)
+      context?.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: size.height), options: CGGradientDrawingOptions(rawValue: 0))
       let image = UIGraphicsGetImageFromCurrentImageContext()
       UIGraphicsEndImageContext();
-      return image;
+      return image!;
     }
 
     // MARK: Image with Text
@@ -133,18 +131,19 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(text: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
-    {
+    convenience init?(text: String, font: UIFont = UIFont.systemFont(ofSize: 18), color: UIColor = UIColor.white, backgroundColor: UIColor = UIColor.gray, size: CGSize = CGSize(width: 100, height: 100), offset: CGPoint = CGPoint(x: 0, y: 0)) {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         label.font = font
         label.text = text
         label.textColor = color
-        label.textAlignment = .Center
+        label.textAlignment = .center
         label.backgroundColor = backgroundColor
+        
         let image = UIImage(fromView: label)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        image?.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        
+        self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
     
@@ -159,8 +158,8 @@ public extension UIImage {
     convenience init?(fromView view: UIView) {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
         //view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
     
@@ -177,72 +176,67 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint = CGPoint(x: 0.5, y: 0.5), radius:Float = 0.5, size:CGSize = CGSizeMake(100, 100))
-    {
-        
-        // Init
+    convenience init?(startColor: UIColor, endColor: UIColor, radialGradientCenter: CGPoint = CGPoint(x: 0.5, y: 0.5), radius: Float = 0.5, size: CGSize = CGSize(width: 100, height: 100)) {
         UIGraphicsBeginImageContextWithOptions(size, true, 0)
         
         let num_locations: Int = 2
         let locations: [CGFloat] = [0.0, 1.0] as [CGFloat]
         
-        let startComponents = CGColorGetComponents(startColor.CGColor)
-        let endComponents = CGColorGetComponents(endColor.CGColor)
+        let startComponents = startColor.cgColor.components!
+        let endComponents = endColor.cgColor.components!
         
-        let components: [CGFloat] = [startComponents[0], startComponents[1], startComponents[2], startComponents[3], endComponents[0], endComponents[1], endComponents[2], endComponents[3]] as [CGFloat]
+        let components: [CGFloat] = [startComponents[0], startComponents[1], startComponents[2], startComponents[3], endComponents[0], endComponents[1], endComponents[2], endComponents[3]]
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, num_locations)
+        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: components, locations: locations, count: num_locations)
         
         // Normalize the 0-1 ranged inputs to the width of the image
         let aCenter = CGPoint(x: radialGradientCenter.x * size.width, y: radialGradientCenter.y * size.height)
         let aRadius = CGFloat(min(size.width, size.height)) * CGFloat(radius)
         
         // Draw it
-        CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, aCenter, 0, aCenter, aRadius, CGGradientDrawingOptions.DrawsAfterEndLocation)
-        self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        UIGraphicsGetCurrentContext()?.drawRadialGradient(gradient!, startCenter: aCenter, startRadius: 0, endCenter: aCenter, endRadius: aRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+        self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
+        
         // Clean up
         UIGraphicsEndImageContext()
     }
     
     // MARK: Alpha
-    
     /**
      Returns true if the image has an alpha layer.
      */
-    func hasAlpha() -> Bool
-    {
-        let alpha = CGImageGetAlphaInfo(self.CGImage)
+    var hasAlpha: Bool {
+        let alpha: CGImageAlphaInfo = self.cgImage!.alphaInfo
         switch alpha {
-        case .First, .Last, .PremultipliedFirst, .PremultipliedLast:
+        case .first, .last, .premultipliedFirst, .premultipliedLast:
             return true
         default:
             return false
-            
         }
     }
     
     /**
      Returns a copy of the given image, adding an alpha channel if it doesn't already have one.
      */
-    func applyAlpha() -> UIImage?
-    {
-        if hasAlpha() {
+    func applyAlpha() -> UIImage? {
+        if hasAlpha {
             return self
         }
         
-        let imageRef = self.CGImage;
-        let width = CGImageGetWidth(imageRef);
-        let height = CGImageGetHeight(imageRef);
-        let colorSpace = CGImageGetColorSpace(imageRef)
+        let imageRef = self.cgImage;
+        let width = imageRef?.width;
+        let height = imageRef?.height;
+        let colorSpace = imageRef?.colorSpace
         
         // The bitsPerComponent and bitmapInfo values are hard-coded to prevent an "unsupported parameter combination" error
-        let bitmapInfo = CGBitmapInfo(rawValue: CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue)
-        let offscreenContext = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, bitmapInfo.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGBitmapInfo().rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue)
+        let offscreenContext = CGContext(data: nil, width: width!, height: height!, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace!, bitmapInfo: bitmapInfo.rawValue)
         
         // Draw the image into the context and retrieve the new image, which will now have an alpha layer
-        CGContextDrawImage(offscreenContext, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), imageRef)
-        let imageWithAlpha = UIImage(CGImage: CGBitmapContextCreateImage(offscreenContext)!)
+        let rect: CGRect = CGRect(x: 0, y: 0, width: CGFloat(width!), height: CGFloat(height!))
+        offscreenContext?.draw(imageRef!, in: rect)
+        let imageWithAlpha = UIImage(cgImage: (offscreenContext?.makeImage()!)!)
         return imageWithAlpha
     }
     
@@ -253,8 +247,7 @@ public extension UIImage {
      
      - Returns A new image.
      */
-    func applyPadding(padding: CGFloat) -> UIImage?
-    {
+    func apply(padding: CGFloat) -> UIImage? {
         // If the image does not have an alpha layer, add one
         let image = self.applyAlpha()
         if image == nil {
@@ -263,17 +256,17 @@ public extension UIImage {
         let rect = CGRect(x: 0, y: 0, width: size.width + padding * 2, height: size.height + padding * 2)
         
         // Build a context that's the same dimensions as the new size
-        let colorSpace = CGImageGetColorSpace(self.CGImage)
-        let bitmapInfo = CGImageGetBitmapInfo(self.CGImage)
-        let bitsPerComponent = CGImageGetBitsPerComponent(self.CGImage)
-        let context = CGBitmapContextCreate(nil, Int(rect.size.width), Int(rect.size.height), bitsPerComponent, 0, colorSpace, bitmapInfo.rawValue)
+        let colorSpace = self.cgImage?.colorSpace
+        let bitmapInfo = self.cgImage?.bitmapInfo
+        let bitsPerComponent = self.cgImage?.bitsPerComponent
+        let context = CGContext(data: nil, width: Int(rect.size.width), height: Int(rect.size.height), bitsPerComponent: bitsPerComponent!, bytesPerRow: 0, space: colorSpace!, bitmapInfo: (bitmapInfo?.rawValue)!)
         
         // Draw the image in the center of the context, leaving a gap around the edges
         let imageLocation = CGRect(x: padding, y: padding, width: image!.size.width, height: image!.size.height)
-        CGContextDrawImage(context, imageLocation, self.CGImage)
+        context?.draw(self.cgImage!, in: imageLocation)
         
         // Create a mask to make the border transparent, and combine it with the image
-        let transparentImage = UIImage(CGImage: CGImageCreateWithMask(CGBitmapContextCreateImage(context), imageRefWithPadding(padding, size: rect.size))!)
+        let transparentImage = UIImage(cgImage: (context?.makeImage()?.masking(imageRef(withPadding: padding, size: rect.size))!)!)
         return transparentImage
     }
     
@@ -285,20 +278,22 @@ public extension UIImage {
      
      - Returns A Core Graphics Image Ref
      */
-    private func imageRefWithPadding(padding: CGFloat, size:CGSize) -> CGImageRef
-    {
+    fileprivate func imageRef(withPadding padding: CGFloat, size: CGSize) -> CGImage {
         // Build a context that's the same dimensions as the new size
         let colorSpace = CGColorSpaceCreateDeviceGray()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.None.rawValue)
-        let context = CGBitmapContextCreate(nil, Int(size.width), Int(size.height), 8, 0, colorSpace, bitmapInfo.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGBitmapInfo().rawValue | CGImageAlphaInfo.none.rawValue)
+        let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+        
         // Start with a mask that's entirely transparent
-        CGContextSetFillColorWithColor(context, UIColor.blackColor().CGColor)
-        CGContextFillRect(context, CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        context?.setFillColor(UIColor.black.cgColor)
+        context?.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        
         // Make the inner part (within the border) opaque
-        CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
-        CGContextFillRect(context, CGRect(x: padding, y: padding, width: size.width - padding * 2, height: size.height - padding * 2))
+        context?.setFillColor(UIColor.white.cgColor)
+        context?.fill(CGRect(x: padding, y: padding, width: size.width - padding * 2, height: size.height - padding * 2))
+        
         // Get an image of the context
-        let maskImageRef = CGBitmapContextCreateImage(context)
+        let maskImageRef = context?.makeImage()
         return maskImageRef!
     }
     
@@ -312,20 +307,22 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func crop(bounds: CGRect) -> UIImage?
-    {
-        return UIImage(CGImage: CGImageCreateWithImageInRect(self.CGImage, bounds)!,
+    func crop(bounds: CGRect) -> UIImage? {
+        return UIImage(cgImage: (self.cgImage?.cropping(to: bounds)!)!,
                        scale: 0.0, orientation: self.imageOrientation)
     }
     
     func cropToSquare() -> UIImage? {
-        let size = CGSizeMake(self.size.width * self.scale, self.size.height * self.scale)
+        let size = CGSize(width: self.size.width * self.scale, height: self.size.height * self.scale)
         let shortest = min(size.width, size.height)
-        let left: CGFloat = size.width > shortest ? (size.width-shortest)/2 : 0
-        let top: CGFloat = size.height > shortest ? (size.height-shortest)/2 : 0
+        
+        let left: CGFloat = (size.width > shortest) ? (size.width - shortest) / 2 : 0
+        let top: CGFloat = (size.height > shortest) ? (size.height - shortest) / 2 : 0
+        
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        let insetRect = CGRectInset(rect, left, top)
-        return crop(insetRect)
+        let insetRect = rect.insetBy(dx: left, dy: top)
+        
+        return crop(bounds: insetRect)
     }
     
     // MARK: Resize
@@ -338,18 +335,17 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func resize(size:CGSize, contentMode: UIImageContentMode = .ScaleToFill) -> UIImage?
-    {
+    func resize(toSize: CGSize, contentMode: UIImageContentMode = .scaleToFill) -> UIImage? {
         let horizontalRatio = size.width / self.size.width;
         let verticalRatio = size.height / self.size.height;
         var ratio: CGFloat!
         
         switch contentMode {
-        case .ScaleToFill:
+        case .scaleToFill:
             ratio = 1
-        case .ScaleAspectFill:
+        case .scaleAspectFill:
             ratio = max(horizontalRatio, verticalRatio)
-        case .ScaleAspectFit:
+        case .scaleAspectFit:
             ratio = min(horizontalRatio, verticalRatio)
         }
         
@@ -359,24 +355,24 @@ public extension UIImage {
         // images. See here: http://vocaro.com/trevor/blog/2009/10/12/resize-a-uiimage-the-right-way/comment-page-2/#comment-39951
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-        let context = CGBitmapContextCreate(nil, Int(rect.size.width), Int(rect.size.height), 8, 0, colorSpace, bitmapInfo.rawValue)
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: nil, width: Int(rect.size.width), height: Int(rect.size.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
         
-        let transform = CGAffineTransformIdentity
+        let transform = CGAffineTransform.identity
         
         // Rotate and/or flip the image if required by its orientation
-        CGContextConcatCTM(context, transform);
+        context?.concatenate(transform);
         
         // Set the quality level to use when rescaling
-        CGContextSetInterpolationQuality(context, CGInterpolationQuality(rawValue: 3)!)
+        context!.interpolationQuality = CGInterpolationQuality(rawValue: 3)!
         
         //CGContextSetInterpolationQuality(context, CGInterpolationQuality(kCGInterpolationHigh.value))
         
         // Draw into the context; this scales the image
-        CGContextDrawImage(context, rect, self.CGImage)
+        context?.draw(self.cgImage!, in: rect)
         
         // Get the resized image from the context and a UIImage
-        let newImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!, scale: self.scale, orientation: self.imageOrientation)
+        let newImage = UIImage(cgImage: (context?.makeImage()!)!, scale: self.scale, orientation: self.imageOrientation)
         return newImage;
     }
     
@@ -390,8 +386,7 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func roundCorners(cornerRadius:CGFloat) -> UIImage?
-    {
+    func roundCorners(cornerRadius: CGFloat) -> UIImage? {
         // If the image does not have an alpha layer, add one
         let imageWithAlpha = applyAlpha()
         if imageWithAlpha == nil {
@@ -399,35 +394,35 @@ public extension UIImage {
         }
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let width = CGImageGetWidth(imageWithAlpha?.CGImage)
-        let height = CGImageGetHeight(imageWithAlpha?.CGImage)
-        let bits = CGImageGetBitsPerComponent(imageWithAlpha?.CGImage)
-        let colorSpace = CGImageGetColorSpace(imageWithAlpha?.CGImage)
-        let bitmapInfo = CGImageGetBitmapInfo(imageWithAlpha?.CGImage)
-        let context = CGBitmapContextCreate(nil, width, height, bits, 0, colorSpace, bitmapInfo.rawValue)
-        let rect = CGRect(x: 0, y: 0, width: CGFloat(width)*scale, height: CGFloat(height)*scale)
+        let width = imageWithAlpha?.cgImage?.width
+        let height = imageWithAlpha?.cgImage?.height
+        let bits = imageWithAlpha?.cgImage?.bitsPerComponent
+        let colorSpace = imageWithAlpha?.cgImage?.colorSpace
+        let bitmapInfo = imageWithAlpha?.cgImage?.bitmapInfo
+        let context = CGContext(data: nil, width: width!, height: height!, bitsPerComponent: bits!, bytesPerRow: 0, space: colorSpace!, bitmapInfo: (bitmapInfo?.rawValue)!)
+        let rect = CGRect(x: 0, y: 0, width: CGFloat(width!)*scale, height: CGFloat(height!)*scale)
         
-        CGContextBeginPath(context)
+        context?.beginPath()
         if (cornerRadius == 0) {
-            CGContextAddRect(context, rect)
+            context?.addRect(rect)
         } else {
-            CGContextSaveGState(context)
-            CGContextTranslateCTM(context, rect.minX, rect.minY)
-            CGContextScaleCTM(context, cornerRadius, cornerRadius)
+            context?.saveGState()
+            context?.translateBy(x: rect.minX, y: rect.minY)
+            context?.scaleBy(x: cornerRadius, y: cornerRadius)
             let fw = rect.size.width / cornerRadius
             let fh = rect.size.height / cornerRadius
-            CGContextMoveToPoint(context, fw, fh/2)
-            CGContextAddArcToPoint(context, fw, fh, fw/2, fh, 1)
-            CGContextAddArcToPoint(context, 0, fh, 0, fh/2, 1)
-            CGContextAddArcToPoint(context, 0, 0, fw/2, 0, 1)
-            CGContextAddArcToPoint(context, fw, 0, fw, fh/2, 1)
-            CGContextRestoreGState(context)
+            context?.move(to: CGPoint(x: fw, y: fh/2))
+            context?.addArc(tangent1End: CGPoint(x: fw, y: fh), tangent2End: CGPoint(x: fw/2, y: fh), radius: 1)
+            context?.addArc(tangent1End: CGPoint(x: 0, y: fh), tangent2End: CGPoint(x: 0, y: fh/2), radius: 1)
+            context?.addArc(tangent1End: CGPoint(x: 0, y: 0), tangent2End: CGPoint(x: fw/2, y: 0), radius: 1)
+            context?.addArc(tangent1End: CGPoint(x: fw, y: 0), tangent2End: CGPoint(x: fw, y: fh/2), radius: 1)
+            context?.restoreGState()
         }
-        CGContextClosePath(context)
-        CGContextClip(context)
+        context?.closePath()
+        context?.clip()
         
-        CGContextDrawImage(context, rect, imageWithAlpha?.CGImage)
-        let image = UIImage(CGImage: CGBitmapContextCreateImage(context)!, scale:scale, orientation: .Up)
+        context?.draw(imageWithAlpha!.cgImage!, in: rect)
+        let image = UIImage(cgImage: (context?.makeImage()!)!, scale:scale, orientation: .up)
         UIGraphicsEndImageContext()
         return image
     }
@@ -441,9 +436,8 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func roundCorners(cornerRadius:CGFloat, border:CGFloat, color:UIColor) -> UIImage?
-    {
-        return roundCorners(cornerRadius)?.applyBorder(border, color: color)
+    func roundCorners(cornerRadius: CGFloat, border: CGFloat, color: UIColor) -> UIImage? {
+        return roundCorners(cornerRadius: cornerRadius)?.apply(border: border, color: color)
     }
     
     /**
@@ -451,10 +445,9 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func roundCornersToCircle() -> UIImage?
-    {
+    func roundCornersToCircle() -> UIImage? {
         let shortest = min(size.width, size.height)
-        return cropToSquare()?.roundCorners(shortest/2)
+        return cropToSquare()?.roundCorners(cornerRadius: shortest/2)
     }
     
     /**
@@ -465,10 +458,9 @@ public extension UIImage {
      
      - Returns UIImage?
      */
-    func roundCornersToCircle(border border:CGFloat, color:UIColor) -> UIImage?
-    {
+    func roundCornersToCircle(withBorder border: CGFloat, color: UIColor) -> UIImage? {
         let shortest = min(size.width, size.height)
-        return cropToSquare()?.roundCorners(shortest/2, border: border, color: color)
+        return cropToSquare()?.roundCorners(cornerRadius: shortest/2, border: border, color: color)
     }
     
     // MARK: Border
@@ -481,24 +473,29 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func applyBorder(border:CGFloat, color:UIColor) -> UIImage? {
+    func apply(border: CGFloat, color: UIColor) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        let width = CGImageGetWidth(self.CGImage)
-        let height = CGImageGetHeight(self.CGImage)
-        let bits = CGImageGetBitsPerComponent(self.CGImage)
-        let colorSpace = CGImageGetColorSpace(self.CGImage)
-        let bitmapInfo = CGImageGetBitmapInfo(self.CGImage)
-        let context = CGBitmapContextCreate(nil, width, height, bits, 0, colorSpace, bitmapInfo.rawValue)
+        let width = self.cgImage?.width
+        let height = self.cgImage?.height
+        let bits = self.cgImage?.bitsPerComponent
+        let colorSpace = self.cgImage?.colorSpace
+        let bitmapInfo = self.cgImage?.bitmapInfo
+        let context = CGContext(data: nil, width: width!, height: height!, bitsPerComponent: bits!, bytesPerRow: 0, space: colorSpace!, bitmapInfo: (bitmapInfo?.rawValue)!)
         var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        CGContextSetRGBStrokeColor(context, red, green, blue, alpha)
-        CGContextSetLineWidth(context, border)
+        
+        context?.setStrokeColor(red: red, green: green, blue: blue, alpha: alpha)
+        context?.setLineWidth(border)
+        
         let rect = CGRect(x: 0, y: 0, width: size.width*scale, height: size.height*scale)
-        let inset = CGRectInset(rect, border*scale, border*scale)
-        CGContextStrokeEllipseInRect(context, inset)
-        CGContextDrawImage(context, inset, self.CGImage)
-        let image = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        let inset = rect.insetBy(dx: border*scale, dy: border*scale)
+        
+        context?.strokeEllipse(in: inset)
+        context?.draw(self.cgImage!, in: inset)
+        
+        let image = UIImage(cgImage: (context?.makeImage()!)!)
         UIGraphicsEndImageContext()
+        
         return image
     }
     
@@ -510,7 +507,7 @@ public extension UIImage {
      - Returns New image or nil
      */
     func applyLightEffect() -> UIImage? {
-        return applyBlur(30, tintColor: UIColor(white: 1.0, alpha: 0.3), saturationDeltaFactor: 1.8)
+        return applyBlur(withRadius: 30, tintColor: UIColor(white: 1.0, alpha: 0.3), saturationDeltaFactor: 1.8)
     }
     
     /**
@@ -519,7 +516,7 @@ public extension UIImage {
      - Returns New image or nil
      */
     func applyExtraLightEffect() -> UIImage? {
-        return applyBlur(20, tintColor: UIColor(white: 0.97, alpha: 0.82), saturationDeltaFactor: 1.8)
+        return applyBlur(withRadius: 20, tintColor: UIColor(white: 0.97, alpha: 0.82), saturationDeltaFactor: 1.8)
     }
     
     /**
@@ -528,7 +525,7 @@ public extension UIImage {
      - Returns New image or nil
      */
     func applyDarkEffect() -> UIImage? {
-        return applyBlur(20, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
+        return applyBlur(withRadius: 20, tintColor: UIColor(white: 0.11, alpha: 0.73), saturationDeltaFactor: 1.8)
     }
     
     /**
@@ -541,7 +538,7 @@ public extension UIImage {
     func applyTintEffect(tintColor: UIColor) -> UIImage? {
         let effectColorAlpha: CGFloat = 0.6
         var effectColor = tintColor
-        let componentCount = CGColorGetNumberOfComponents(tintColor.CGColor)
+        let componentCount = tintColor.cgColor.numberOfComponents
         if componentCount == 2 {
             var b: CGFloat = 0
             if tintColor.getWhite(&b, alpha: nil) {
@@ -556,9 +553,9 @@ public extension UIImage {
                 effectColor = UIColor(red: red, green: green, blue: blue, alpha: effectColorAlpha)
             }
         }
-        return applyBlur(10, tintColor: effectColor, saturationDeltaFactor: -1.0)
+        return applyBlur(withRadius: 10, tintColor: effectColor, saturationDeltaFactor: -1.0)
     }
-
+    
     /**
      Applies a blur to an image based on the specified radius, tint color saturation and mask image
      
@@ -569,16 +566,16 @@ public extension UIImage {
      
      - Returns New image or nil
      */
-    func applyBlur(blurRadius:CGFloat, tintColor:UIColor?, saturationDeltaFactor:CGFloat, maskImage:UIImage? = nil) -> UIImage? {
-        guard size.width > 0 && size.height > 0 && CGImage != nil else {
+    func applyBlur(withRadius blurRadius: CGFloat, tintColor: UIColor?, saturationDeltaFactor: CGFloat, maskImage: UIImage? = nil) -> UIImage? {
+        guard size.width > 0 && size.height > 0 && cgImage != nil else {
             return nil
         }
         if maskImage != nil {
-            guard maskImage?.CGImage != nil else {
+            guard maskImage?.cgImage != nil else {
                 return nil
             }
         }
-        let imageRect = CGRect(origin: CGPointZero, size: size)
+        let imageRect = CGRect(origin: CGPoint.zero, size: size)
         var effectImage = self
         let hasBlur = blurRadius > CGFloat(FLT_EPSILON)
         let hasSaturationChange = fabs(saturationDeltaFactor - 1.0) > CGFloat(FLT_EPSILON)
@@ -586,28 +583,29 @@ public extension UIImage {
             
             UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
             let effectInContext = UIGraphicsGetCurrentContext()
-            CGContextScaleCTM(effectInContext, 1.0, -1.0)
-            CGContextTranslateCTM(effectInContext, 0, -size.height)
-            CGContextDrawImage(effectInContext, imageRect, CGImage)
+            effectInContext?.scaleBy(x: 1.0, y: -1.0)
+            effectInContext?.translateBy(x: 0, y: -size.height)
+            effectInContext?.draw(cgImage!, in: imageRect)
             
             var effectInBuffer = vImage_Buffer(
-                data: CGBitmapContextGetData(effectInContext),
-                height: UInt(CGBitmapContextGetHeight(effectInContext)),
-                width: UInt(CGBitmapContextGetWidth(effectInContext)),
-                rowBytes: CGBitmapContextGetBytesPerRow(effectInContext))
-           
+                data: effectInContext?.data,
+                height: UInt((effectInContext?.height)!),
+                width: UInt((effectInContext?.width)!),
+                rowBytes: (effectInContext?.bytesPerRow)!)
+            
             UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
             let effectOutContext = UIGraphicsGetCurrentContext()
             
             var effectOutBuffer = vImage_Buffer(
-                data: CGBitmapContextGetData(effectOutContext),
-                height: UInt(CGBitmapContextGetHeight(effectOutContext)),
-                width: UInt(CGBitmapContextGetWidth(effectOutContext)),
-                rowBytes: CGBitmapContextGetBytesPerRow(effectOutContext))
+                data: effectOutContext?.data,
+                height: UInt((effectOutContext?.height)!),
+                width: UInt((effectOutContext?.width)!),
+                rowBytes: (effectOutContext?.bytesPerRow)!)
             
             if hasBlur {
-                let inputRadius = blurRadius * UIScreen.mainScreen().scale
-                var radius = UInt32(floor(inputRadius * 3.0 * CGFloat(sqrt(2.0 * M_PI)) / 4.0 + 0.5))
+                let inputRadius = blurRadius * UIScreen.main.scale
+                let sqrtPi: CGFloat = CGFloat(sqrt(M_PI * 2.0))
+                var radius = UInt32(floor(inputRadius * 3.0 * sqrtPi / 4.0 + 0.5))
                 if radius % 2 != 1 {
                     radius += 1 // force radius to be odd so that the three box-blur methodology works.
                 }
@@ -630,7 +628,7 @@ public extension UIImage {
                 
                 let divisor: CGFloat = 256
                 let matrixSize = floatingPointSaturationMatrix.count
-                var saturationMatrix = [Int16](count: matrixSize, repeatedValue: 0)
+                var saturationMatrix = [Int16](repeating: 0, count: matrixSize)
                 
                 for i: Int in 0 ..< matrixSize {
                     saturationMatrix[i] = Int16(round(floatingPointSaturationMatrix[i] * divisor))
@@ -645,43 +643,43 @@ public extension UIImage {
             }
             
             if !effectImageBuffersAreSwapped {
-                effectImage = UIGraphicsGetImageFromCurrentImageContext()
+                effectImage = UIGraphicsGetImageFromCurrentImageContext()!
             }
             
             UIGraphicsEndImageContext()
             
             if effectImageBuffersAreSwapped {
-                effectImage = UIGraphicsGetImageFromCurrentImageContext()
+                effectImage = UIGraphicsGetImageFromCurrentImageContext()!
             }
             
             UIGraphicsEndImageContext()
         }
         
         // Set up output context.
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         let outputContext = UIGraphicsGetCurrentContext()
-        CGContextScaleCTM(outputContext, 1.0, -1.0)
-        CGContextTranslateCTM(outputContext, 0, -size.height)
+        outputContext?.scaleBy(x: 1.0, y: -1.0)
+        outputContext?.translateBy(x: 0, y: -size.height)
         
         // Draw base image.
-        CGContextDrawImage(outputContext, imageRect, self.CGImage)
+        outputContext?.draw(self.cgImage!, in: imageRect)
         
         // Draw effect image.
         if hasBlur {
-            CGContextSaveGState(outputContext)
+            outputContext?.saveGState()
             if let image = maskImage {
-                CGContextClipToMask(outputContext, imageRect, image.CGImage);
+                outputContext?.clip(to: imageRect, mask: image.cgImage!);
             }
-            CGContextDrawImage(outputContext, imageRect, effectImage.CGImage)
-            CGContextRestoreGState(outputContext)
+            outputContext?.draw(effectImage.cgImage!, in: imageRect)
+            outputContext?.restoreGState()
         }
         
         // Add in color tint.
         if let color = tintColor {
-            CGContextSaveGState(outputContext)
-            CGContextSetFillColorWithColor(outputContext, color.CGColor)
-            CGContextFillRect(outputContext, imageRect)
-            CGContextRestoreGState(outputContext)
+            outputContext?.saveGState()
+            outputContext?.setFillColor(color.cgColor)
+            outputContext?.fill(imageRect)
+            outputContext?.restoreGState()
         }
         
         // Output image is ready.
@@ -689,7 +687,7 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         
         return outputImage
-
+        
     }
     
     
@@ -705,30 +703,29 @@ public extension UIImage {
      
      - Returns A new image
      */
-    class func imageFromURL(url: String, placeholder: UIImage, shouldCacheImage: Bool = true, closure: (image: UIImage?) -> ()) -> UIImage?
-    {
+    class func image(fromURL url: String, placeholder: UIImage, shouldCacheImage: Bool = true, closure: @escaping (_ image: UIImage?) -> ()) -> UIImage? {
         // From Cache
         if shouldCacheImage {
-            if let image = UIImage.sharedCache().objectForKey(url) as? UIImage {
-                closure(image: nil)
+            if let image = UIImage.shared.object(forKey: url as AnyObject) as? UIImage {
+                closure(nil)
                 return image
             }
         }
         // Fetch Image
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        if let nsURL = NSURL(string: url) {
-            session.dataTaskWithURL(nsURL, completionHandler: { (data, response, error) -> Void in
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        if let nsURL = URL(string: url) {
+            session.dataTask(with: nsURL, completionHandler: { (data, response, error) -> Void in
                 if (error != nil) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        closure(image: nil)
+                    DispatchQueue.main.async {
+                        closure(nil)
                     }
                 }
-                if let data = data, image = UIImage(data: data) {
+                if let data = data, let image = UIImage(data: data) {
                     if shouldCacheImage {
-                        UIImage.sharedCache().setObject(image, forKey: url)
+                        UIImage.shared.setObject(image, forKey: url as AnyObject)
                     }
-                    dispatch_async(dispatch_get_main_queue()) {
-                        closure(image: image)
+                    DispatchQueue.main.async {
+                        closure(image)
                     }
                 }
                 session.finishTasksAndInvalidate()
@@ -736,5 +733,4 @@ public extension UIImage {
         }
         return placeholder
     }
-    
 }

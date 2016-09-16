@@ -24,9 +24,9 @@ public extension UIImageView {
      
      - Returns A new image
      */
-    func imageFromURL(url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((image: UIImage?) -> ())? = nil)
+    func imageFromURL(_ url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((_ image: UIImage?) -> ())? = nil)
     {
-        self.image = UIImage.imageFromURL(url, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
+        self.image = UIImage.image(fromURL: url, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
             (image: UIImage?) in
             if image == nil {
                 return
@@ -37,9 +37,9 @@ public extension UIImageView {
                 transition.duration = 0.5
                 transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                 transition.type = kCATransitionFade
-                self.layer.addAnimation(transition, forKey: nil)
+                self.layer.add(transition, forKey: nil)
             }
-            closure?(image:image)
+            closure?(image)
         }
     }
     
