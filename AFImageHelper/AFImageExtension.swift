@@ -74,13 +74,14 @@ public extension UIImage {
         self.init(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
     }
-    
+
     /**
      Applies gradient color overlay to an image.
-     
+
      - Parameter gradientColors: An array of colors to use for the gradient.
+     - Parameter locations: An array of locations to use for the gradient.
      - Parameter blendMode: The blending type to use.
-     
+
      - Returns A new image
      */
     func apply(gradientColors: [UIColor], blendMode: CGBlendMode = CGBlendMode.normal) -> UIImage {
@@ -108,11 +109,11 @@ public extension UIImage {
         
         return image!
     }
-    
+
     // MARK: Image with Text
     /**
      Creates a text label image.
-     
+
      - Parameter text: The text to use in the label.
      - Parameter font: The font (default: System font of size 18)
      - Parameter color: The text color (default: White)
