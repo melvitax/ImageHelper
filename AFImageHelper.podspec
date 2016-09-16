@@ -21,9 +21,8 @@ A collection of extensions for handling image creation from colors and gradients
     s.source = { :git => "https://github.com/melvitax/ImageHelper.git", :tag => s.version.to_s }
     s.social_media_url = 'https://twitter.com/melvitax'
 
-    s.platforms = { :ios => '8.4', :tvos => '9.0',  :watchos => '2.0' }
+    s.platforms = { :ios => '8.4', :tvos => '9.0' }
     s.ios.deployment_target = "8.4"
-    s.watchos.deployment_target = "2.0"
     s.tvos.deployment_target = "9.0"
 
     s.xcconfig = { 'SWIFT_VERSION' => '3.0' }
