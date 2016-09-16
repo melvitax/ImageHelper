@@ -66,51 +66,64 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(gradientColors:[UIColor], size:CGSize = CGSizeMake(10, 10) )
+    convenience init?(gradientColors:[UIColor], size:CGSize = CGSizeMake(10, 10), locations: [Float] = [] )
     {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
-        let gradient = CGGradientCreateWithColors(colorSpace, colors, nil)
+        let gradient: CGGradient
+        if locations.count > 0 {
+          let cgLocations = locations.map { CGFloat($0) }
+          gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+        } else {
+          gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
+        }
         CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
         self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
         UIGraphicsEndImageContext()
     }
-    
+
     /**
      Applies gradient color overlay to an image.
-     
+
      - Parameter gradientColors: An array of colors to use for the gradient.
+     - Parameter locations: An array of locations to use for the gradient.
      - Parameter blendMode: The blending type to use.
-     
+
      - Returns A new image
      */
-    func applyGradientColors(gradientColors: [UIColor], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
+    func applyGradientColors(gradientColors: [UIColor], locations: [Float] = [], blendMode: CGBlendMode = CGBlendMode.Normal) -> UIImage
     {
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        let context = UIGraphicsGetCurrentContext()
-        CGContextTranslateCTM(context, 0, size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        CGContextSetBlendMode(context, blendMode)
-        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-        CGContextDrawImage(context, rect, self.CGImage)
-        // Create gradient
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
-        let gradient = CGGradientCreateWithColors(colorSpace, colors, nil)
-        // Apply gradient
-        CGContextClipToMask(context, rect, self.CGImage)
-        CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext();
-        return image;
+      UIGraphicsBeginImageContextWithOptions(size, false, scale)
+      let context = UIGraphicsGetCurrentContext()
+      CGContextTranslateCTM(context, 0, size.height)
+      CGContextScaleCTM(context, 1.0, -1.0)
+      CGContextSetBlendMode(context, blendMode)
+      let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+      CGContextDrawImage(context, rect, self.CGImage)
+      // Create gradient
+      let colorSpace = CGColorSpaceCreateDeviceRGB()
+      let colors = gradientColors.map {(color: UIColor) -> AnyObject! in return color.CGColor as AnyObject! } as NSArray
+      let gradient: CGGradient
+      if locations.count > 0 {
+        let cgLocations = locations.map { CGFloat($0) }
+        gradient = CGGradientCreateWithColors(colorSpace, colors, cgLocations)!
+      } else {
+        gradient = CGGradientCreateWithColors(colorSpace, colors, nil)!
+      }
+      // Apply gradient
+      CGContextClipToMask(context, rect, self.CGImage)
+      CGContextDrawLinearGradient(context, gradient, CGPoint(x: 0, y: 0), CGPoint(x: 0, y: size.height), CGGradientDrawingOptions(rawValue: 0))
+      let image = UIGraphicsGetImageFromCurrentImageContext()
+      UIGraphicsEndImageContext();
+      return image;
     }
-    
+
     // MARK: Image with Text
     /**
      Creates a text label image.
-     
+
      - Parameter text: The text to use in the label.
      - Parameter font: The font (default: System font of size 18)
      - Parameter color: The text color (default: White)
