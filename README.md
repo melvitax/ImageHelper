@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 [![License](https://img.shields.io/cocoapods/l/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
 [![Platform](https://img.shields.io/cocoapods/p/AFImageHelper.svg?style=flat)](http://cocoapods.org/pods/AFImageHelper)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 Image Extensions for Swift 3.0
 

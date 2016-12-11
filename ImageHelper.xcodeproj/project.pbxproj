@@ -82,7 +82,6 @@
 		65EAC4D91D8C42E40001F670 /* ImageVIewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageVIewExtension.swift; sourceTree = "<group>"; };
 		65EAC4DA1D8C42E40001F670 /* Info-iOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		65EAC4DB1D8C42E40001F670 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
-		65EAC4DC1D8C42E40001F670 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
 		65F5EC3D1D8C493C004A35E8 /* Demo tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65F5EC3F1D8C493C004A35E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65F5EC441D8C493C004A35E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -187,7 +186,6 @@
 				65EAC4D81D8C42E40001F670 /* ImageHelper.h */,
 				65EAC4DA1D8C42E40001F670 /* Info-iOS.plist */,
 				65EAC4DB1D8C42E40001F670 /* Info-tvOS.plist */,
-				65EAC4DC1D8C42E40001F670 /* Info-watchOS.plist */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
