@@ -20,11 +20,11 @@ public extension UIImageView {
      - Parameter url: The image URL.
      - Parameter placeholder: The placeholder image.
      - Parameter fadeIn: Weather the mage should fade in.
-     - Parameter closure: Returns the image from the web the first time is fetched.
+     - Parameter completion: Returns the image from the web the first time is fetched.
      
      - Returns A new image
      */
-    func imageFromURL(_ url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, closure: ((_ image: UIImage?) -> ())? = nil)
+    func imageFromURL(_ url: String, placeholder: UIImage, fadeIn: Bool = true, shouldCacheImage: Bool = true, completion: ((_ image: UIImage?) -> ())? = nil)
     {
         self.image = UIImage.image(fromURL: url, placeholder: placeholder, shouldCacheImage: shouldCacheImage) {
             (image: UIImage?) in
@@ -39,10 +39,10 @@ public extension UIImageView {
                 transition.type = kCATransitionFade
                 self.layer.add(transition, forKey: nil)
             }
-            closure?(image)
+            completion?(image)
         }
     }
     
     
 }
- 
+
