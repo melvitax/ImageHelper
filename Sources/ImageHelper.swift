@@ -335,7 +335,7 @@ public extension UIImage {
      
      - Returns A new image
      */
-    func resize(toSize: CGSize, contentMode: UIImageContentMode = .scaleToFill) -> UIImage? {
+    func resize(size: CGSize, contentMode: UIImageContentMode = .scaleToFill) -> UIImage? {
         let horizontalRatio = size.width / self.size.width;
         let verticalRatio = size.height / self.size.height;
         var ratio: CGFloat!
@@ -349,7 +349,7 @@ public extension UIImage {
             ratio = min(horizontalRatio, verticalRatio)
         }
         
-        let rect = CGRect(x: 0, y: 0, width: size.width * ratio, height: size.height * ratio)
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         // Fix for a colorspace / transparency issue that affects some types of
         // images. See here: http://vocaro.com/trevor/blog/2009/10/12/resize-a-uiimage-the-right-way/comment-page-2/#comment-39951
