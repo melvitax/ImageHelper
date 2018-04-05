@@ -110,6 +110,7 @@ class ViewController: UICollectionViewController {
         sections.append("Raw to Image")
         var raw = [CellItem]()
         let size = CGSize.init(width: 100, height: 100)
+        // RGBA
         var rgba: Array<UInt8> = Array.init(repeating: 0, count: Int(size.width * size.height * 4))
         for y in 0..<Int(size.height) {
             for x in 0..<Int(size.width) {

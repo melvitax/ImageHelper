@@ -204,7 +204,7 @@ public extension UIImage {
     
     // MARK: Image from raw RGBA data
     /**
-     Creates a radial gradient.
+     Creates a RGB image from raw RGBA.
      
      - Parameter rgbaData: raw RGBA data
      - Parameter size: Image size
