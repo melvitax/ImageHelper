@@ -241,6 +241,44 @@ public extension UIImage {
         self.init(cgImage:cgim!)
     }
     
+    // MARK: Image from raw mono data
+    /**
+     Creates a Grayscale image from raw mono.
+     
+     - Parameter rgbaData: raw mono data
+     - Parameter size: Image size
+     
+     - Returns A new image
+     */
+    convenience init?(grayBuffer: [UInt8], size: CGSize) {
+        let bitsPerComponent:Int = 8
+        let bitsPerPixel:Int = 8
+        let bitsPerRow:Int = Int(size.width)
+        
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let bitmapInfo = CGBitmapInfo()
+        let data = NSData.init(bytes: grayBuffer, length: Int(size.width * size.height))
+        let provider = CGDataProvider.init(data: data)!
+        let renderingIntent = CGColorRenderingIntent.defaultIntent
+        
+        let cgim = CGImage(
+            width: Int(size.width),
+            height: Int(size.height),
+            bitsPerComponent: bitsPerComponent,
+            bitsPerPixel: bitsPerPixel,
+            bytesPerRow: bitsPerRow,
+            space: colorSpace,
+            bitmapInfo: bitmapInfo,
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: true,
+            intent: renderingIntent
+        )
+        
+        // Draw it
+        self.init(cgImage:cgim!)
+    }
+    
     // MARK: Alpha
     /**
      Returns true if the image has an alpha layer.
