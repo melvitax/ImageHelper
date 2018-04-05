@@ -139,6 +139,19 @@ class ViewController: UICollectionViewController {
         if let image = UIImage(rgbaBuffer: rgba, size: size) {
             raw.append(CellItem(text: "RGBA", image: image))
         }
+        
+        // Grayscale
+        var gray: Array<UInt8> = Array.init(repeating: 0, count: Int(size.width * size.height))
+        for y in 0..<Int(size.height) {
+            for x in 0..<Int(size.width) {
+                let unitSize: Int = 20
+                let buf: UInt8 = (((x / unitSize) % 2) != ((y / unitSize) % 2)) == true ? 255 : 0
+                gray[y * Int(size.width) + x] = buf
+            }
+        }
+        if let image = UIImage(grayBuffer: gray, size: size) {
+            raw.append(CellItem(text: "Grayscale", image: image))
+        }
         items.append(raw)
         
         // Web Image
