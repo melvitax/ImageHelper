@@ -135,7 +135,7 @@ class ViewController: UICollectionViewController {
                 rgba[(y * Int(size.width) + x) * 4 + 3] = 255
             }
         }
-        if let image = UIImage(rgbaData: rgba, size: size) {
+        if let image = UIImage(rgbaBuffer: rgba, size: size) {
             raw.append(CellItem(text: "RGBA", image: image))
         }
         items.append(raw)

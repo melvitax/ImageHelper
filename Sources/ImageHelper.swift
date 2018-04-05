@@ -211,7 +211,7 @@ public extension UIImage {
      
      - Returns A new image
      */
-    convenience init?(rgbaData: [UInt8], size: CGSize) {
+    convenience init?(rgbaBuffer: [UInt8], size: CGSize) {
         let bitsPerComponent:Int = 8
         let bitsPerPixel:Int = 32
         let rgbaSize = 4
@@ -219,7 +219,7 @@ public extension UIImage {
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-        let data = NSData.init(bytes: rgbaData, length: Int(size.width * size.height * CGFloat(rgbaSize)))
+        let data = NSData.init(bytes: rgbaBuffer, length: Int(size.width * size.height * CGFloat(rgbaSize)))
         let provider = CGDataProvider.init(data: data)!
         let renderingIntent = CGColorRenderingIntent.defaultIntent
         
