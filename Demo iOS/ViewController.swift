@@ -106,6 +106,54 @@ class ViewController: UICollectionViewController {
         }
         items.append(effects)
         
+        // Raw Image
+        sections.append("Raw to Image")
+        var raw = [CellItem]()
+        let size = CGSize.init(width: 100, height: 100)
+        // RGBA
+        var rgba: Array<UInt8> = Array.init(repeating: 0, count: Int(size.width * size.height * 4))
+        for y in 0..<Int(size.height) {
+            for x in 0..<Int(size.width) {
+                var r: UInt8 = 0
+                var g: UInt8 = 0
+                var b: UInt8 = 0
+                
+                if y > 100 / 3 * 2 {
+                    let unit = UInt(x / 10) * 10
+                    let value = UInt8(Double(unit) / 100.0 * 255)
+                    r = value
+                    g = value
+                    b = value
+                } else {
+                    r = x < 40 ? 255 : 0
+                    g = (x > 20 && x < 80) ? 255 : 0
+                    b = x > 60 ? 255 : 0
+                }
+                
+                rgba[(y * Int(size.width) + x) * 4]     = r
+                rgba[(y * Int(size.width) + x) * 4 + 1] = g
+                rgba[(y * Int(size.width) + x) * 4 + 2] = b
+                rgba[(y * Int(size.width) + x) * 4 + 3] = 255
+            }
+        }
+        if let image = UIImage(rgbaBuffer: rgba, size: size) {
+            raw.append(CellItem(text: "RGBA", image: image))
+        }
+        
+        // Grayscale
+        var gray: Array<UInt8> = Array.init(repeating: 0, count: Int(size.width * size.height))
+        for y in 0..<Int(size.height) {
+            for x in 0..<Int(size.width) {
+                let unitSize: Int = 20
+                let buf: UInt8 = (((x / unitSize) % 2) != ((y / unitSize) % 2)) == true ? 255 : 0
+                gray[y * Int(size.width) + x] = buf
+            }
+        }
+        if let image = UIImage(grayBuffer: gray, size: size) {
+            raw.append(CellItem(text: "Grayscale", image: image))
+        }
+        items.append(raw)
+        
         // Web Image
         sections.append("Web Image")
         var web = [CellItem]()
